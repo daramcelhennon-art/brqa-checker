@@ -3554,5 +3554,13 @@
     "note": "Priced EUR500m 7y SP at MS+62bp; headline/body/priced-deal 14651086 (finalBooks=750, dealRegsOnly=true, opCo/holdCo=false correct \u2014 Finnish bank not on whitelist, all format/additional-info flags correct incl seniorPreferred=true)/deal-level flags all clean. tranches[]=null (single-tranche PRICED; tranche captured in priced-deal form). Bot already in thread \u2014 skipped repost, state recorded.",
     "verdict": "clean"
   },
+  "1788788232.924709": {
+    "br_id": 14650894,
+    "category": "hg",
+    "checked_at": "2026-09-07T13:41:25Z",
+    "issuer": "DekaBank",
+    "note": "Allocations out EUR500m 3y SNP at MS+43bp; headline/body/tranche form (v14651038 MS+43 launched)/6-JBR count matching source with (B&D) after DekaBank/deal-level flags all clean; book-line 'Book update: Final books above EUR1.05bn (excl JLM)' \u2014 prefix fine pre-Priced with book figure per book-line memory.",
+    "verdict": "clean"
+  },
   "_last_tick": "2026-09-07T12:45:56Z"
 }
