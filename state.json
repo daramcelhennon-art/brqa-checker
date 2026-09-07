@@ -3562,5 +3562,34 @@
     "note": "Allocations out EUR500m 3y SNP at MS+43bp; headline/body/tranche form (v14651038 MS+43 launched)/6-JBR count matching source with (B&D) after DekaBank/deal-level flags all clean; book-line 'Book update: Final books above EUR1.05bn (excl JLM)' \u2014 prefix fine pre-Priced with book figure per book-line memory.",
     "verdict": "clean"
   },
+  "1788788711.898869": {
+    "br_id": 14650868,
+    "category": "hg",
+    "checked_at": "2026-09-07T13:56:56Z",
+    "issuer": "OP Corporate Bank",
+    "note": "ISIN follow-up broadcast (XS3504771364) at Priced stage \u2014 flagged: Book Update: prefix at Priced (hard rule) + ISIN missing from body despite priced-deal form isin populated; bot already in thread from concurrent tick, skipped repost.",
+    "verdict": "flagged"
+  },
+  "1788788736.096949": {
+    "br_id": 14650846,
+    "category": "hg",
+    "checked_at": "2026-09-07T13:56:56Z",
+    "issuer": "LBBW",
+    "note": "Priced EUR1bn 4y Public Sector Pfandbrief at MS+11bp \u2014 headline/body/priced-deal 14651087 (finalBooks=1650, covered=true additionalInfo=PC, dealRegsOnly=true, opCo/holdCo=false correct \u2014 German bank not on whitelist)/deal flags (coveredBonds=true, expectedPageId cleared) all clean; bot already in thread from concurrent tick, skipped repost.",
+    "verdict": "clean"
+  },
+  "1788788757.047049": {
+    "checked_at": "2026-09-07T13:56:56Z",
+    "note": "Chat ask (\"can you send the codes\"); Finn self-checked. Not a Bloomberg term sheet.",
+    "verdict": "skipped"
+  },
+  "1788788998.566299": {
+    "br_id": 14650911,
+    "category": "hg",
+    "checked_at": "2026-09-07T13:56:56Z",
+    "issuer": "Brenntag",
+    "note": "Allocations out EUR500m 7y at MS+100bp; headline/body/tranche 14650913 (MS+100 launched JT-LEADS 4 leads)/deal flags all clean; book-line Book update: Final books over EUR1.9bn OK per pre-Priced prefix rule; posted clean finding.",
+    "verdict": "clean"
+  },
   "_last_tick": "2026-09-07T12:45:56Z"
 }
