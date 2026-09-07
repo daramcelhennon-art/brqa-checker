@@ -3604,7 +3604,14 @@
     "note": "BNG DIP - GBP Increase Jan28s attachment is a binary .doc that slack_file.py cannot read; BR search returns no BNG/BNGAA/Nederlandse/Gemeenten/GBP-Jan-2028 hits across hg+em. Reactor Finn Marshall confirmed 'already added' in thread but deal not surfaceable via search index (likely private-placement/DIP add). Skipped rather than post spurious missing flag.",
     "verdict": "skipped"
   },
-  "_last_tick": "2026-09-07T12:45:56Z",
+  "1788790584.234239": {
+    "br_id": null,
+    "category": null,
+    "checked_at": "2026-09-07T14:42:43Z",
+    "issuer": "Beacon Financial (US pipeline)",
+    "note": "Identifiers-only codes-share (FIGI BBG024FFYJS0 / CUSIP 084680AC1 / ISIN US084680AC15) with image.png attachment; BR search returned no matching deal (US pipeline, not yet on BR per thread context); no post",
+    "verdict": "skipped"
+  },
   "1788790998.220179": {
     "br_id": 14650911,
     "category": "hg",
@@ -3629,12 +3636,18 @@
     "note": "Allocations Out EUR750m PNC8.3 Hybrid Grn at 5.05%; tranche 14650908 (JT-LEADS 6 banks) + headline/body/deal flags all clean; posted",
     "verdict": "clean"
   },
-  "1788790584.234239": {
-    "br_id": null,
-    "category": null,
-    "checked_at": "2026-09-07T14:42:43Z",
-    "issuer": "Beacon Financial (US pipeline)",
-    "note": "Identifiers-only codes-share (FIGI BBG024FFYJS0 / CUSIP 084680AC1 / ISIN US084680AC15) with image.png attachment; BR search returned no matching deal (US pipeline, not yet on BR per thread context); no post",
+  "1788792109.228849": {
+    "br_id": 14650906,
+    "category": "hg",
+    "checked_at": "2026-09-07T15:06:36Z",
+    "issuer": "ENGIE",
+    "note": "CORRECTION ON BOOK SIZE (2.35bn->2.30bn) at Allocations Out; BR body already reads Final books over EUR2.30bn matching corrected figure; headline/body/tranche v14651059 (750m PNC8.3Grn / 5.05% / launched / 6 banks JT-LEADS)/deal flags all clean. bot_already_in_thread from concurrent tick.",
+    "verdict": "clean"
+  },
+  "1788793207.298259": {
+    "checked_at": "2026-09-07T15:06:36Z",
+    "note": "Bot chat instruction to check EU-hours priced deals; not a term sheet.",
     "verdict": "skipped"
-  }
+  },
+  "_last_tick": "2026-09-07T12:45:56Z"
 }
