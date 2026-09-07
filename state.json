@@ -3604,5 +3604,37 @@
     "note": "BNG DIP - GBP Increase Jan28s attachment is a binary .doc that slack_file.py cannot read; BR search returns no BNG/BNGAA/Nederlandse/Gemeenten/GBP-Jan-2028 hits across hg+em. Reactor Finn Marshall confirmed 'already added' in thread but deal not surfaceable via search index (likely private-placement/DIP add). Skipped rather than post spurious missing flag.",
     "verdict": "skipped"
   },
-  "_last_tick": "2026-09-07T12:45:56Z"
+  "_last_tick": "2026-09-07T12:45:56Z",
+  "1788790998.220179": {
+    "br_id": 14650911,
+    "category": "hg",
+    "checked_at": "2026-09-07T14:42:43Z",
+    "issuer": "Brenntag",
+    "note": "Priced EUR500m 7y at MS+100bp; priced-form 14651091 (finalBooks=1900) + headline/body/deal flags all clean; bot_already_in_thread skipped repost",
+    "verdict": "clean"
+  },
+  "1788791502.060149": {
+    "br_id": 14650945,
+    "category": "hg",
+    "checked_at": "2026-09-07T14:42:43Z",
+    "issuer": "Banco BPM",
+    "note": "Allocations EUR750m 6NC5 EuGB SNP at MS+85bp; tranche 14650947 (JT-LEADS 7 banks) + headline/body/deal flags all clean; posted",
+    "verdict": "clean"
+  },
+  "1788791733.361059": {
+    "br_id": 14650906,
+    "category": "hg",
+    "checked_at": "2026-09-07T14:42:43Z",
+    "issuer": "ENGIE",
+    "note": "Allocations Out EUR750m PNC8.3 Hybrid Grn at 5.05%; tranche 14650908 (JT-LEADS 6 banks) + headline/body/deal flags all clean; posted",
+    "verdict": "clean"
+  },
+  "1788790584.234239": {
+    "br_id": null,
+    "category": null,
+    "checked_at": "2026-09-07T14:42:43Z",
+    "issuer": "Beacon Financial (US pipeline)",
+    "note": "Identifiers-only codes-share (FIGI BBG024FFYJS0 / CUSIP 084680AC1 / ISIN US084680AC15) with image.png attachment; BR search returned no matching deal (US pipeline, not yet on BR per thread context); no post",
+    "verdict": "skipped"
+  }
 }
