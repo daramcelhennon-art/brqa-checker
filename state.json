@@ -3591,5 +3591,18 @@
     "note": "Allocations out EUR500m 7y at MS+100bp; headline/body/tranche 14650913 (MS+100 launched JT-LEADS 4 leads)/deal flags all clean; book-line Book update: Final books over EUR1.9bn OK per pre-Priced prefix rule; posted clean finding.",
     "verdict": "clean"
   },
+  "1788790271.460019": {
+    "br_id": 14650894,
+    "category": "hg",
+    "checked_at": "2026-09-07T14:22:00Z",
+    "issuer": "DekaBank",
+    "note": "Priced EUR500m 3y SNP at MS+43bp; priced-deal 14651088 finalBooks=null while body/source Allocs carry final books EUR1.05bn (excl JLM); all other fields clean. bot_already_in_thread from concurrent tick \u2014 skipped repost, state recorded.",
+    "verdict": "flagged"
+  },
+  "1788790330.207049": {
+    "checked_at": "2026-09-07T14:22:00Z",
+    "note": "BNG DIP - GBP Increase Jan28s attachment is a binary .doc that slack_file.py cannot read; BR search returns no BNG/BNGAA/Nederlandse/Gemeenten/GBP-Jan-2028 hits across hg+em. Reactor Finn Marshall confirmed 'already added' in thread but deal not surfaceable via search index (likely private-placement/DIP add). Skipped rather than post spurious missing flag.",
+    "verdict": "skipped"
+  },
   "_last_tick": "2026-09-07T12:45:56Z"
 }
