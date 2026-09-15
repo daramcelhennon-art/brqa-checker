@@ -1,0 +1,140 @@
+name: BR QA Deal
+
+on:
+  workflow_dispatch:
+    inputs:
+      message_ts:
+        description: 'Slack message timestamp'
+        required: true
+        type: string
+      message_json:
+        description: 'Full Slack message JSON'
+        required: true
+        type: string
+
+# Each deal runs independently — no concurrency limit.
+# GitHub Actions allows up to 20 concurrent jobs on free plans.
+
+jobs:
+  qa:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          persist-credentials: true
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Cache global npm (Claude CLI)
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: npm-claude-code-v1
+
+      - name: Install Claude CLI
+        run: npm install -g @anthropic-ai/claude-code
+
+      - name: Install Playwright (pip only)
+        run: pip install playwright
+
+      - name: Restore BR cookies cache
+        id: cookies-cache
+        uses: actions/cache@v4
+        with:
+          path: cookies.json
+          key: br-cookies-${{ github.run_id }}
+          restore-keys: |
+            br-cookies-
+
+      - name: Refresh BR cookies if missing/stale
+        env:
+          BR_USERNAME: ${{ secrets.BR_USERNAME }}
+          BR_PASSWORD: ${{ secrets.BR_PASSWORD }}
+          BR_NGINX_USER: ${{ secrets.BR_NGINX_USER }}
+          BR_NGINX_PASS: ${{ secrets.BR_NGINX_PASS }}
+        run: |
+          if [ ! -f cookies.json ]; then
+            echo "No cookies.json — logging in fresh."
+            python3 refresh_cookies.py || { echo "cookie refresh failed"; exit 1; }
+          else
+            AGE=$(( $(date +%s) - $(stat -c %Y cookies.json) ))
+            if [ $AGE -gt 21600 ]; then
+              echo "cookies.json is ${AGE}s old (>6h) — refreshing."
+              python3 refresh_cookies.py || { echo "cookie refresh failed"; exit 1; }
+            else
+              echo "cookies.json is ${AGE}s old — reusing."
+            fi
+          fi
+
+      - name: Write deal to shard file
+        run: |
+          echo '${{ inputs.message_json }}' | python3 -c "
+          import sys, json
+          msg = json.loads(sys.stdin.read())
+          json.dump([msg], open('shard_0.json', 'w'), indent=2)
+          "
+
+      - name: QA single deal
+        env:
+          CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+          BR_USERNAME: ${{ secrets.BR_USERNAME }}
+          BR_PASSWORD: ${{ secrets.BR_PASSWORD }}
+          SHARD_FILE: shard_0.json
+          STATE_DELTA_FILE: state_delta_0.json
+        run: |
+          TS="${{ inputs.message_ts }}"
+          echo "=== QA deal $TS $(date -u +%Y-%m-%dT%H:%M:%SZ) ===" | tee -a logs/qa.log
+          mkdir -p logs
+          claude -p "$(cat tick_shard_prompt.txt)" \
+            --model claude-sonnet-5 \
+            --dangerously-skip-permissions \
+            >> logs/qa.log 2>&1
+          echo "=== done $(date -u +%Y-%m-%dT%H:%M:%SZ) ===" | tee -a logs/qa.log
+
+      - name: Merge state delta + apply reaction
+        if: always()
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+        run: |
+          if ls state_delta_*.json >/dev/null 2>&1; then
+            python3 merge_deltas.py | tee -a logs/qa.log
+          else
+            echo "no state delta to merge" | tee -a logs/qa.log
+          fi
+          rm -f shard_*.json queue_meta.json
+
+      - name: Save BR cookies cache
+        if: always()
+        uses: actions/cache/save@v4
+        with:
+          path: cookies.json
+          key: br-cookies-${{ github.run_id }}
+
+      - name: Commit updated state.json
+        if: always()
+        run: |
+          git config user.name "brqa-bot"
+          git config user.email "brqa-bot@users.noreply.github.com"
+          git pull --rebase origin main || true
+          if git diff --quiet state.json 2>/dev/null; then
+            echo "state.json unchanged"
+          else
+            git add state.json
+            git commit -m "state: qa ${{ inputs.message_ts }}" || true
+            git push || true
+          fi
