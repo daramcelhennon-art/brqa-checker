@@ -99,9 +99,9 @@ jobs:
           SHARD_FILE: shard_0.json
           STATE_DELTA_FILE: state_delta_0.json
         run: |
+          mkdir -p logs
           TS="${{ inputs.message_ts }}"
           echo "=== QA deal $TS $(date -u +%Y-%m-%dT%H:%M:%SZ) ===" | tee -a logs/qa.log
-          mkdir -p logs
           claude -p "$(cat tick_shard_prompt.txt)" \
             --model claude-sonnet-5 \
             --dangerously-skip-permissions \
