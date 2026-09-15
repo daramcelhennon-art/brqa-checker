@@ -75,42 +75,31 @@ If you find yourself typing a Fix bullet that matches any pattern above, delete 
 7. Never suggest embedding a joined level for dual/multi-tranche headlines.
 8. Every finding (clean OR flagged) includes the BR headline + full message body in a Slack blockquote (`Published to BR:` block).
 
-## Output template — every Slack post MUST include ALL these sections in this order:
+## Output template — Slack posts MUST be SHORT
 
+You MUST still run ALL six checks internally (headline, body, tranche form, deal flags, priced-deal form, sweep). But the Slack post itself is TERSE:
+
+**CLEAN verdict** — post this and nothing more:
 ```
 <@USERID>
-:white_check_mark: BR QA — id `<BR deal id>` at <stage> — Perfect! Great job
-   (or :warning: BR QA — id `<BR deal id>` at <stage> — <one-line summary>)
-
-Headline walk: `** ` prefix ✓, issuer `<X>` ✓, ccy+size `<X>` ✓, tenor `<X>` ✓, format flag(s) `<X>` ✓, stage word `<X>` matches body opener ✓, level `<X>` matches body + tranche ✓, no multi/tap.
-
-Body walk: <one sentence per major section>.
-
-Tranche form (id `<tranche_id>` current version):
-  Tranche A: currency=<X> / volume=<X> / structure=<X> / priceEvolution=<X> / bookOrRating=<X> / timing=<X> [✓ or ✗]
-  Tranche B: ... [if multi-tranche]
-
-Priced-deal form (id `<priced_deal_id>`) walk — INCLUDE ONLY at Priced/Priced tap/Book stats stages:
-  currency=<X> ✓, nominal=<X> ✓, cpn=<X> ✓, fpr=<X> ✓, spread=<X> ✓, yield=<X> ✓, fxRate=<X> ✓, isin=<X> ✓, figi=<X> ✓, bloombergCode=<X> ✓, tier=<X> ✓, moodys/snp/fitch=<X>/<X>/<X> ✓, dealRegsOnly=<X> ✓, [additional-info booleans], leagueTable=<X> ✓, additionalInfo="<X>" ✓, banks.active=<N> ✓, finalBooks=<X> ✓
-  [flag each mismatch inline; finalBooks MUST be printed per tranche — null while siblings/source have a figure is a flag]
-
-Deal-level flags: `coveredBonds:<T/F>`, `regionAmericas:<T/F>` (why), `expectedPageId:<X>`, `expectedPageCount:<N>`, `feedIgrd:<T/F>`, `highYield:<T/F>` [flag any mismatch].
-
-Fix: [ONLY if flagged — one bullet per defect, in the exact shape below. See memory/feedback_bondradar_clear_fix_bullets.md. Never bury the ask inside walkthrough prose; put every defect here as its own bullet.]
-• <Field / location> — <current value> → <correct value>. <One-clause reason if not obvious.>
-• <second defect if any>
-• <third defect if any>
-[Clean findings: OMIT the Fix section entirely — no defects means no bullets.]
-
-Published to BR:
-> <full BR headline>
->
-> <full BR message body verbatim, blockquoted line by line>
+:white_check_mark: BR QA — id `<BR deal id>` at <stage> — Clean
 
 _(automated · BR QA Checker)_
 ```
 
-Sections marked "Priced-deal form" and "Tranche form" are MANDATORY — do not collapse them to a phrase like "tranche form matches". Print every field of every tranche, one line each.
+**FLAGGED verdict** — tag the reactor, one-line summary, Fix bullets only:
+```
+<@USERID>
+:warning: BR QA — id `<BR deal id>` at <stage> — <one-line summary>
+
+Fix:
+• <Field / location> — <current value> → <correct value>. <One-clause reason if not obvious.>
+• <second defect if any>
+
+_(automated · BR QA Checker)_
+```
+
+Do NOT include headline walk, body walk, tranche form dump, priced-deal form dump, deal-level flags dump, or "Published to BR" blockquote in the Slack post. Those checks happen internally — the Slack post is just the verdict and any Fix bullets.
 
 Output at the end: one-line summary — e.g. `Shard <ID>: N messages, N-flagged, N-clean, N-skipped, delta file written`.
 
