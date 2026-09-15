@@ -62,20 +62,16 @@ This **replaces** the human `@brqa` ping done by the old `bond-deal-qa-monitor`.
 
    i. **Post findings — threaded reply on the original term-sheet message.** Post via `slack_send_message` with `channel_id=C09JX51GAKH` and `thread_ts=<the term-sheet message's ts>` (NOT a rolling parent).
 
-      **Perfect** (no @-mention; quote the actual BR message body back into the thread so anyone reading can see exactly what was published and verified). Use encouraging phrasing — this replaces the earlier "clean" wording:
+      **Perfect** — a single line, no @-mention, no BR body quote (the human can see BR directly; quoting bloats every future channel re-read). Use encouraging phrasing:
       ```
-      :white_check_mark: BR QA — id `<BR deal id>` at <stage> — Perfect! Great job
-
-      Published to BR:
-      > <the full BR headline on its own line>
-      > <blank line then the BR message body, wrapped in Slack blockquote so it renders indented>
-
-      _(automated · BR QA Checker)_
+      :white_check_mark: BR QA — id `<BR deal id>` at <stage> — Perfect! Great job — <one-line what was verified, e.g. "Final Terms MS+28 ✓, 4 JLMs ✓, ISINs ✓">
       ```
-      The blockquote lets the human see the exact BR text without leaving the thread. Include the whole message body verbatim (headline + message), not a summary. Multi-tranche messages should include every tranche line plus the Common terms paragraph. Say "Perfect! Great job" — not "clean" — in the passing verdict.
+      One line total. No `Published to BR:` block, no blockquote. If a flagged reply later corrects a clean, that reply will name what changed. Multi-tranche and priced deals still get the same one-line format — the note field just summarises what was walked (e.g. "5NC2 5.375% ✓ / 7NC3 5.875% ✓, 5 JLMs each ✓, dealBanks.active correct").
 
-      **Flagged** (visual of the issue in BR text, then bullet-list of actions — no @-mention):
+      **Flagged** — MUST prepend `<@REACTOR_USERID>` as the FIRST LINE of the finding text, before the `:warning:` line. The reactor is the person who ✅'d the term sheet (i.e. the person who did the deal and made the mistake); they need to be tagged so they see the flag. This is a hard rule — every flagged/missing reply gets the mention prepended, no exceptions. Fetch reactor via `slack_reactors.py CHAN ORIG_TS`. Do NOT post the mention as a separate follow-up reply.
       ```
+      <@REACTOR_USERID>
+
       :warning: BR QA — id `<BR deal id>` at <stage>
 
       BR currently reads:
@@ -88,8 +84,10 @@ This **replaces** the human `@brqa` ping done by the old `bond-deal-qa-monitor`.
       _(automated · BR QA Checker)_
       ```
 
-      When the flag is on **tranche form data** rather than the message body, quote the tranche row instead of a BR body fragment:
+      When the flag is on **tranche form data** rather than the message body, quote the tranche row instead of a BR body fragment (mention still prepended):
       ```
+      <@REACTOR_USERID>
+
       :warning: BR QA — id `<BR deal id>` at <stage>
 
       Tranche <A|B|…> form currently reads:
