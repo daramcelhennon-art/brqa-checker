@@ -81,10 +81,12 @@ jobs:
           fi
 
       - name: Write deal to shard file
+        env:
+          MESSAGE_JSON: ${{ inputs.message_json }}
         run: |
-          echo '${{ inputs.message_json }}' | python3 -c "
-          import sys, json
-          msg = json.loads(sys.stdin.read())
+          python3 -c "
+          import os, json
+          msg = json.loads(os.environ['MESSAGE_JSON'])
           json.dump([msg], open('shard_0.json', 'w'), indent=2)
           "
 

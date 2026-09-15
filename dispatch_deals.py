@@ -125,10 +125,22 @@ def main() -> int:
         if _trigger_workflow(ts, msg_json):
             print(f"  dispatched {ts}")
             dispatched += 1
+            state[ts] = {"dispatched_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())}
         else:
             print(f"  failed to dispatch {ts}")
 
-    print(f"dispatched {dispatched}/{len(candidates)} deals")
+    # Write state immediately so the next dispatcher run doesn't re-dispatch.
+    state_path.write_text(json.dumps(state, indent=2))
+    print(f"dispatched {dispatched}/{len(candidates)} deals, state updated")
+
+    # Commit + push state.json so the next run sees it.
+    if dispatched > 0:
+        os.system('git config user.name "brqa-bot"')
+        os.system('git config user.email "brqa-bot@users.noreply.github.com"')
+        os.system('git add state.json')
+        os.system(f'git commit -m "state: dispatched {dispatched} deals" --quiet')
+        os.system('git pull --rebase origin main --quiet 2>/dev/null; git push origin main --quiet 2>/dev/null')
+
     return 0
 
 
