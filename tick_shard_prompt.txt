@@ -81,7 +81,6 @@ You MUST still run ALL six checks internally (headline, body, tranche form, deal
 
 **CLEAN verdict** — post this and nothing more:
 ```
-<@USERID>
 :white_check_mark: BR QA — id `<BR deal id>` at <stage> — Clean
 
 _(automated · BR QA Checker)_
