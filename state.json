@@ -3649,7 +3649,7 @@
     "note": "Bot chat instruction to check EU-hours priced deals; not a term sheet.",
     "verdict": "skipped"
   },
-  "_last_tick": "2026-09-07T12:45:56Z",
+  "_last_tick": "2026-09-15T17:32:31Z",
   "1789489390.640889": {
     "verdict": "clean",
     "deal_id": "14660441",
@@ -3702,13 +3702,26 @@
     "ts": "1789488821.530529"
   },
   "1789485368.481139": {
-    "verdict": "skipped",
-    "reason": "empty message",
-    "ts": "1789485368.481139"
+    "verdict": "clean",
+    "deal_id": 14660467,
+    "priced_id": 14661069,
+    "stage": "priced",
+    "note": "headline ** Avolta EUR350m 5.5NC2: Priced at 5.25% / body / priced-form 14661069: nominal=350 EUR cpn=5.25 fpr=100 B+190 y=5.250% isin=XS3508785303 figi=BBG02530FH08 bbg=DQ7122426 Ba2/BB+/NR dealRegsOnly coc+mwc banks=19/0 finalBooks=null additionalInfo=UOP:Refi HY-grade leagueTable=T /"
   },
   "1789487121.358409": {
     "verdict": "skipped",
     "reason": "chat question (not a deal)",
     "ts": "1789487121.358409"
+  },
+  "1789491011.641809": {
+    "verdict": "flagged",
+    "deal_id": 14661050,
+    "ts": "1789491011.641809",
+    "posted": 1789492787.032637
+  },
+  "1789492340.756959": {
+    "verdict": "clean",
+    "note": "headline \u2713 body \u2713 tranches \u2713 deal-flags \u2713 \u2014 priceEvolution T+38 on T-A is correct at Launched stage",
+    "ts": 1789493487.194389
   }
 }
