@@ -3649,5 +3649,66 @@
     "note": "Bot chat instruction to check EU-hours priced deals; not a term sheet.",
     "verdict": "skipped"
   },
-  "_last_tick": "2026-09-07T12:45:56Z"
+  "_last_tick": "2026-09-07T12:45:56Z",
+  "1789489390.640889": {
+    "verdict": "clean",
+    "deal_id": "14660441",
+    "ts": "1789489390.640889"
+  },
+  "1789487258.397939": {
+    "verdict": "clean",
+    "deal_id": "14660562",
+    "ts": "1789487258.397939"
+  },
+  "1789485751.740549": {
+    "verdict": "clean",
+    "deal_id": "14660480",
+    "ts": "1789485751.740549"
+  },
+  "1789486902.557659": {
+    "verdict": "clean",
+    "deal_id": "14650932",
+    "ts": "1789486902.557659"
+  },
+  "1789487598.391159": {
+    "verdict": "clean",
+    "deal_id": "var_energi_launched",
+    "ts": "1789487598.391159"
+  },
+  "1789487850.055449": {
+    "verdict": "clean",
+    "deal_id": "expand_energy_launched",
+    "ts": "1789487850.055449"
+  },
+  "1789489016.978949": {
+    "verdict": "clean",
+    "deal_id": "analog_devices_guidance",
+    "ts": "1789489016.978949"
+  },
+  "1789488645.428829": {
+    "verdict": "flagged",
+    "deal_id": "14660996",
+    "defects": [
+      "bookOrRating JT-LEADS on <=3 BRs (T-A,T-B,T-C)"
+    ],
+    "ts": "1789488645.428829"
+  },
+  "1789488821.530529": {
+    "verdict": "flagged",
+    "deal_id": "14660652",
+    "defects": [
+      "headline wrong form: Launched at <level> instead of at <level>: Launched"
+    ],
+    "ts": "1789488821.530529"
+  },
+  "1789485368.481139": {
+    "verdict": "skipped",
+    "reason": "empty message",
+    "ts": "1789485368.481139"
+  },
+  "1789487121.358409": {
+    "verdict": "skipped",
+    "reason": "chat question (not a deal)",
+    "ts": "1789487121.358409"
+  }
 }
