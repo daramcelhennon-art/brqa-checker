@@ -3649,7 +3649,7 @@
     "note": "Bot chat instruction to check EU-hours priced deals; not a term sheet.",
     "verdict": "skipped"
   },
-  "_last_tick": "2026-09-15T17:32:31Z",
+  "_last_tick": "2026-09-15T17:42:31.722325",
   "1789489390.640889": {
     "verdict": "clean",
     "deal_id": "14660441",
@@ -3723,5 +3723,181 @@
     "verdict": "clean",
     "note": "headline \u2713 body \u2713 tranches \u2713 deal-flags \u2713 \u2014 priceEvolution T+38 on T-A is correct at Launched stage",
     "ts": 1789493487.194389
+  },
+  "1789484170.698719": {
+    "verdict": "already_qa_d",
+    "checked_at": "2026-09-15T17:43:13Z"
+  },
+  "1789484132.818029": {
+    "verdict": "already_qa_d",
+    "checked_at": "2026-09-15T17:43:13Z"
+  },
+  "1789483424.214089": {
+    "verdict": "already_qa_d",
+    "checked_at": "2026-09-15T17:43:13Z"
+  },
+  "1789482597.759279": {
+    "verdict": "already_qa_d",
+    "checked_at": "2026-09-15T17:43:13Z"
+  },
+  "1789480874.012339": {
+    "verdict": "already_qa_d",
+    "checked_at": "2026-09-15T17:43:13Z"
+  },
+  "1789480853.062469": {
+    "verdict": "already_qa_d",
+    "checked_at": "2026-09-15T17:43:13Z"
+  },
+  "1789480647.427209": {
+    "verdict": "already_qa_d",
+    "checked_at": "2026-09-15T17:43:13Z"
+  },
+  "1789480551.471119": {
+    "verdict": "already_qa_d",
+    "checked_at": "2026-09-15T17:43:13Z"
+  },
+  "1789480247.992719": {
+    "verdict": "already_qa_d",
+    "checked_at": "2026-09-15T17:43:13Z"
+  },
+  "1789479889.130299": {
+    "verdict": "already_qa_d",
+    "checked_at": "2026-09-15T17:43:13Z"
+  },
+  "1789479240.646069": {
+    "verdict": "already_qa_d",
+    "checked_at": "2026-09-15T17:43:13Z"
+  },
+  "1789479051.469659": {
+    "verdict": "already_qa_d",
+    "checked_at": "2026-09-15T17:43:13Z"
+  },
+  "1789478652.221689": {
+    "verdict": "already_qa_d",
+    "checked_at": "2026-09-15T17:43:13Z"
+  },
+  "1789478240.324689": {
+    "verdict": "already_qa_d",
+    "checked_at": "2026-09-15T17:43:13Z"
+  },
+  "1789478198.167829": {
+    "verdict": "already_qa_d",
+    "checked_at": "2026-09-15T17:43:13Z"
+  },
+  "1789478050.253759": {
+    "verdict": "already_qa_d",
+    "checked_at": "2026-09-15T17:43:13Z"
+  },
+  "1789477810.818339": {
+    "verdict": "already_qa_d",
+    "checked_at": "2026-09-15T17:43:13Z"
+  },
+  "1789477777.166369": {
+    "verdict": "already_qa_d",
+    "checked_at": "2026-09-15T17:43:13Z"
+  },
+  "1789477638.854509": {
+    "verdict": "already_qa_d",
+    "checked_at": "2026-09-15T17:43:13Z"
+  },
+  "1789477368.694109": {
+    "verdict": "already_qa_d",
+    "checked_at": "2026-09-15T17:43:13Z"
+  },
+  "1789477354.086839": {
+    "verdict": "already_qa_d",
+    "checked_at": "2026-09-15T17:43:13Z"
+  },
+  "1789476954.142359": {
+    "verdict": "already_qa_d",
+    "checked_at": "2026-09-15T17:43:13Z"
+  },
+  "1789476934.267149": {
+    "verdict": "already_qa_d",
+    "checked_at": "2026-09-15T17:43:13Z"
+  },
+  "1789476899.623759": {
+    "verdict": "already_qa_d",
+    "checked_at": "2026-09-15T17:43:13Z"
+  },
+  "1789476424.503829": {
+    "verdict": "already_qa_d",
+    "checked_at": "2026-09-15T17:43:13Z"
+  },
+  "1789476129.179999": {
+    "verdict": "already_qa_d",
+    "checked_at": "2026-09-15T17:43:13Z"
+  },
+  "1789475881.023589": {
+    "verdict": "already_qa_d",
+    "checked_at": "2026-09-15T17:43:13Z"
+  },
+  "1789475813.784879": {
+    "verdict": "already_qa_d",
+    "checked_at": "2026-09-15T17:43:13Z"
+  },
+  "1789475650.720329": {
+    "verdict": "already_qa_d",
+    "checked_at": "2026-09-15T17:43:13Z"
+  },
+  "1789475623.582459": {
+    "verdict": "already_qa_d",
+    "checked_at": "2026-09-15T17:43:13Z"
+  },
+  "1789475217.106079": {
+    "verdict": "already_qa_d",
+    "checked_at": "2026-09-15T17:43:13Z"
+  },
+  "1789475009.002779": {
+    "verdict": "already_qa_d",
+    "checked_at": "2026-09-15T17:43:13Z"
+  },
+  "1789474717.269609": {
+    "verdict": "already_qa_d",
+    "checked_at": "2026-09-15T17:43:13Z"
+  },
+  "1789474666.472509": {
+    "verdict": "already_qa_d",
+    "checked_at": "2026-09-15T17:43:13Z"
+  },
+  "1789474563.835819": {
+    "verdict": "already_qa_d",
+    "checked_at": "2026-09-15T17:43:13Z"
+  },
+  "1789474447.157209": {
+    "verdict": "already_qa_d",
+    "checked_at": "2026-09-15T17:43:13Z"
+  },
+  "1789474401.278399": {
+    "verdict": "already_qa_d",
+    "checked_at": "2026-09-15T17:43:13Z"
+  },
+  "1789474384.773069": {
+    "verdict": "already_qa_d",
+    "checked_at": "2026-09-15T17:43:13Z"
+  },
+  "1789473910.953409": {
+    "verdict": "already_qa_d",
+    "checked_at": "2026-09-15T17:43:13Z"
+  },
+  "1789473715.025809": {
+    "verdict": "already_qa_d",
+    "checked_at": "2026-09-15T17:43:13Z"
+  },
+  "1789473697.234479": {
+    "verdict": "already_qa_d",
+    "checked_at": "2026-09-15T17:43:13Z"
+  },
+  "1789473678.435979": {
+    "verdict": "already_qa_d",
+    "checked_at": "2026-09-15T17:43:13Z"
+  },
+  "1789473005.028329": {
+    "verdict": "already_qa_d",
+    "checked_at": "2026-09-15T17:43:13Z"
+  },
+  "1789472689.546909": {
+    "verdict": "already_qa_d",
+    "checked_at": "2026-09-15T17:43:13Z"
   }
 }
