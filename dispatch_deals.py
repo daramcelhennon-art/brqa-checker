@@ -50,6 +50,28 @@ def _slack_get(method: str, params: dict) -> dict:
     return body
 
 
+_BOT_ID: str | None = None
+
+def _bot_id() -> str:
+    global _BOT_ID
+    if _BOT_ID is None:
+        r = _slack_get("auth.test", {})
+        _BOT_ID = r.get("bot_id") or r.get("user_id")
+    return _BOT_ID
+
+
+def _bot_already_replied(thread_ts: str) -> bool:
+    """True if the bot has any reply in this thread — the most reliable already-done guard."""
+    try:
+        replies = _slack_get("conversations.replies", {
+            "channel": CHANNEL, "ts": thread_ts, "limit": 20,
+        }).get("messages") or []
+        bot = _bot_id()
+        return any(m.get("bot_id") == bot for m in replies[1:])
+    except Exception:
+        return False
+
+
 def _trigger_workflow(message_ts: str, message_json: str) -> bool:
     """Trigger the qa-deal.yml workflow for a single deal. Returns True on success."""
     gh_token = os.environ.get("GITHUB_TOKEN")
@@ -113,6 +135,13 @@ def main() -> int:
             continue
         if reactions & ALREADY_QAD:
             # Bot already QA'd this — skip even if state.json is stale
+            continue
+        # Final guard: check if bot already has a reply in the thread.
+        # Catches the case where reactions were manually corrected but the
+        # bot's reply still exists — avoids re-dispatching into a live thread.
+        if m.get("reply_count", 0) > 0 and _bot_already_replied(ts):
+            print(f"  {ts}: bot already replied in thread — skipping")
+            state[ts] = {"dispatched_at": "already_replied"}
             continue
         candidates.append(m)
 
