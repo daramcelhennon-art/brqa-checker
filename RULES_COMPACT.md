@@ -69,6 +69,7 @@
 - Stage progression: Mandate → IPTs → Price talk → Guidance → Revised Guidance → Book Update → Spread set → Launched/Final Terms → Allocations → Priced
 - `Spread set` is a valid BR stage — spread fixed but deal not yet formally priced; do NOT flag as wrong stage or require priced-deal record
 - `Price talk` is a valid BR stage word — used when source says "PRICE TALK" after a prior IPTs stage (narrowed range before final guidance); body opener: `Price talk is X% for <Issuer>'s...`
+- NEVER upgrade source "Price Talk" to "Guidance" in the flag — if source says "Price Talk", the BR stage Price Talk is CORRECT; only flag as wrong stage if source explicitly says "Guidance"
 - `Revised IPTs` is almost never correct — source "PRICE TALK" after IPTs = `Price talk`, not `Revised IPTs`
 - `Revised Guidance` only when level explicitly moves AFTER a Guidance stage was already published
 - HY NC structure must appear in headline (`5NC2` not just `5y`)
