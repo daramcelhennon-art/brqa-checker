@@ -65,8 +65,9 @@
 - Size qualifiers: `(exp.)` for expected, `+` or `(min.)` for minimum, `(max.)` for maximum — placed after size, before tenor
 - Launched/Final Terms: two coherent forms — (A) `at <level>: Final Terms` or (B) `at <level>: Launched`; NEVER `… : Launched at <level>`
 - `Revised guidance` when level moves between guidance updates (not `Guidance` or `Book update`)
-- Stage progression: IPTs (first level) → Guidance (second level / "Price Talk" after IPTs) → Revised Guidance (level moves again) → Book Update → Launched/Final Terms → Allocations → Priced
-- `Revised IPTs` is almost never correct — if IPTs already published and source gives "Price Talk", that is `Guidance` not `Revised IPTs`
+- Stage progression: Mandate → IPTs → Price talk → Guidance → Revised Guidance → Book Update → Launched/Final Terms → Allocations → Priced
+- `Price talk` is a valid BR stage word — used when source says "PRICE TALK" after a prior IPTs stage (narrowed range before final guidance)
+- `Revised IPTs` is almost never correct — source "PRICE TALK" after IPTs = `Price talk`, not `Revised IPTs`
 - `Revised Guidance` only when level explicitly moves AFTER a Guidance stage was already published
 - HY NC structure must appear in headline (`5NC2` not just `5y`)
 - `dual-tranche` / `multi-tranche` after tenor: `EUR500m 5y dual-tranche`
