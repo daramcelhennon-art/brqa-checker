@@ -46,7 +46,7 @@
 - Don't flag punctuation nits on established shorthand (excl JLM, incl JLM, T+X)
 - Fxd-to-Frn coupon structure / regulatory boilerplate — never flag missing
 - SMR / List / Law when source didn't provide them — never flag
-- Missing benchmark ref (UKT/UST/DBR/OAT) — only flag when absent AND source gave a spread
+- Missing benchmark ref (UKT/UST/DBR/OAT) — pricing-stage only; added when a spread is set relative to it. Never flag at IPTs/Guidance/Launched (benchmark comes at pricing)
 - FRN priceEvolution drops tenor prefix (`E+55a` not `3mE+55a`)
 - CITIC Securities + China CITIC Bank Intl = one BR bank ID; don't flag 1-gap
 - priceEvolution one-digit truncation when full value exceeds ~14 char field limit — by design
@@ -109,6 +109,7 @@
 - `emDetails.regionLatam`/`regionCeemea`/`regionAsia`/`feedEmrd` — correct for EM
 - `expectedPageId` populated pre-priced; clears on Priced (don't flag null on Priced)
 - `expectedPageCount` = min(len(tranches), 5) — pre-priced only
+- `hyExpectedPageId` — pre-priced only; clears on Priced (don't flag null on Priced)
 - `pricedDeals[]` empty at Allocations Out — NOT a flag (body-update stage only)
 - EM deals: skip regionAmericas check and pricedDeals[] empty check (HG-only)
 
