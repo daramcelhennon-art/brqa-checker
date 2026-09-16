@@ -161,7 +161,7 @@ Strip source tenor prefixes (`3mS+`, `6mE+`, `3mL+`). Primary spread only (Gilts
 ## BOOK-LINE RULES (summary)
 - Allocations: `Book update: Final books over <X>.` — own line, prefix required, `Final` required
 - Priced Case A (JLM disclosed): appended to closing paragraph: `Final books over <X> (incl. <Y> JLM).`
-- Priced Case A (no JLM): NO book line in body; `finalBooks` field only
+- Priced Case A (no JLM figure — source omits JLM amount or says `excl. JLM` without a figure): NO book line in body at all; `finalBooks` field in priced-deal form only — never suggest appending `(excl. JLM)` to body
 - Priced Case B: appended: `Books last heard over <X>.`; mirror in `additionalInfo`; `finalBooks` null
 - JLM handling: LATEST book update only; if latest didn't disclose JLM, no parenthetical
 - `finalBooks` field: millions of tranche ccy (1200 = EUR1.2bn)
