@@ -65,7 +65,8 @@
 - Size qualifiers: `(exp.)` for expected, `+` or `(min.)` for minimum, `(max.)` for maximum — placed after size, before tenor
 - Launched/Final Terms: two coherent forms — (A) `at <level>: Final Terms` or (B) `at <level>: Launched`; NEVER `… : Launched at <level>`
 - `Revised guidance` when level moves between guidance updates (not `Guidance` or `Book update`)
-- Stage progression: Mandate → IPTs → Price talk → Guidance → Revised Guidance → Book Update → Launched/Final Terms → Allocations → Priced
+- Stage progression: Mandate → IPTs → Price talk → Guidance → Revised Guidance → Book Update → Spread set → Launched/Final Terms → Allocations → Priced
+- `Spread set` is a valid BR stage — spread fixed but deal not yet formally priced; do NOT flag as wrong stage or require priced-deal record
 - `Price talk` is a valid BR stage word — used when source says "PRICE TALK" after a prior IPTs stage (narrowed range before final guidance); body opener: `Price talk is X% for <Issuer>'s...`
 - `Revised IPTs` is almost never correct — source "PRICE TALK" after IPTs = `Price talk`, not `Revised IPTs`
 - `Revised Guidance` only when level explicitly moves AFTER a Guidance stage was already published
