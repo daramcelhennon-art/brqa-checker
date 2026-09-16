@@ -185,6 +185,38 @@ def _score_match(needle_tokens: list[str], *, borrower: str, headline: str, mess
     return 0
 
 
+# Fields in the deal record that Claude never checks — strip to save tokens.
+_DEAL_STRIP = frozenset({
+    "legacyId", "createdAt", "changedAt", "created", "changed",
+    "priority", "borrowerId", "expectedPageIdStored", "expectedPages",
+    "fromLinkedIncrease", "dealHistory",
+})
+
+# Fields in the priced record that Claude never checks.
+_PRICED_STRIP = frozenset({
+    "legacyId", "createdAt", "createdAtDate", "changedAt", "borrowerId",
+    "pricingTime", "headlineComment", "expectedDealHistory",
+    "increaseNominal", "increaseExchange", "increaseRetained",
+    "nominalSecond", "nominalTotal", "exchangeTotal", "retainedTotal",
+    "fxRate", "oldSpread", "bloombergNsnCode", "increaseExchange",
+    "attachmentName", "attachmentId", "newAttachmentId", "attachmentExists",
+    "ownAttachments", "parentPricedDeal", "copyFromPricedDeal",
+    "fromExpectedDealId", "storyId", "currentTimeRequested",
+    "priceEvolutionMigrated", "statsClassificationMigrated", "tierMigrated",
+    "additionalInfoMigrated", "finalStatsMigrated", "rating", "grade",
+    "increase", "lastIncrease", "messageFilled", "pricingMessage",
+    "orderType", "ggb",
+})
+
+
+def _slim(d: object, strip: frozenset) -> object:
+    if isinstance(d, dict):
+        return {k: _slim(v, strip) for k, v in d.items() if k not in strip}
+    if isinstance(d, list):
+        return [_slim(i, strip) for i in d]
+    return d
+
+
 def _cli(argv: list[str]) -> int:
     if len(argv) < 2:
         print("usage: bondradar_api.py {search ISSUER | list CAT [SIZE] | get CAT ID | news CAT ID | priced CAT ID}", file=sys.stderr)
@@ -194,13 +226,12 @@ def _cli(argv: list[str]) -> int:
     if cmd == "search":
         issuer = " ".join(argv[2:])
         hits = br.find_by_issuer(issuer)
-        print(json.dumps(hits, indent=2, default=str))
+        print(json.dumps(_slim(hits, _DEAL_STRIP), default=str))
     elif cmd == "list":
         cat = argv[2]
         size = int(argv[3]) if len(argv) > 3 else 20
-        print(json.dumps(br.list_deals(cat, size=size), indent=2, default=str))
+        print(json.dumps(_slim(br.list_deals(cat, size=size), _DEAL_STRIP), default=str))
     elif cmd == "get":
-        # Given the list endpoint carries full deal bodies, "get" is just a filter.
         cat, dealid = argv[2], int(argv[3])
         for pg in range(20):
             items = br.list_deals(cat, page=pg)
@@ -208,18 +239,16 @@ def _cli(argv: list[str]) -> int:
                 break
             for it in items:
                 if it["id"] == dealid:
-                    print(json.dumps(it, indent=2, default=str))
+                    print(json.dumps(_slim(it, _DEAL_STRIP), default=str))
                     return 0
         print(f"deal {dealid} not found in {cat}", file=sys.stderr)
         return 1
     elif cmd == "news":
-        # Full news-detail endpoint (includes tranches, dealHistory, pricedDeals summary).
         cat, dealid = argv[2], int(argv[3])
-        print(json.dumps(br.get_news(cat, dealid), indent=2, default=str))
+        print(json.dumps(_slim(br.get_news(cat, dealid), _DEAL_STRIP), default=str))
     elif cmd == "priced":
-        # Full priced-deal form record (all form fields — fpr/spread/yield/isin/figi/checkboxes/etc.).
         cat, priced_id = argv[2], int(argv[3])
-        print(json.dumps(br.get_priced_deal(cat, priced_id), indent=2, default=str))
+        print(json.dumps(_slim(br.get_priced_deal(cat, priced_id), _PRICED_STRIP), default=str))
     else:
         print(f"unknown command: {cmd}", file=sys.stderr)
         return 2
