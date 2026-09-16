@@ -36,6 +36,7 @@
 - `(no books)` bank drops entirely from body and banks.active/passive
 - Tenders/LM/buyback/exchange/consent solicitation — verdict:"skipped", no post
 - Co-managers — NOT in banks.active OR banks.passive; only GCs/Sr Co-Leads/passive JLMs in passive
+- `JLNB` (Joint Lead Non-Books) — NOT in banks.active OR banks.passive; excluded same as co-managers
 - "X to B&D" — role designation among existing JBRs, never changes bank counts
 - MC/PC in additionalInfo — only flag if source explicitly states collateral type
 - `Books last heard:` colon-form vs `Books last heard over` in additionalInfo — both acceptable
