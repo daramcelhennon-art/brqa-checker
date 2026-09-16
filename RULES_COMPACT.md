@@ -135,7 +135,7 @@
 - Format flags: EXACTLY ONE true of `dealRegsOnly`/`deal144aOnly`/`deal144aRegs`/`secRegistered`/`hg3a2`/`hgSecExempt`
 - `finalBooks` — MUST match body; null when source gave book size = flag
 - `finalBooks` vs `additionalInfo Books last heard` — mutually exclusive
-- `leagueTable` — true by default; false only for: maturity <18m (HG) / <365d (EM), size <USD100m equiv, ABS/CDO, domestic-only
+- `leagueTable` — true by default; false only for: maturity <18m (HG) / <365d (EM), size <USD100m equiv (HG only — size threshold does NOT apply to EM deals), ABS/CDO, domestic-only
 - `additionalInfo` required tags: HY → `UOP:` shorthand (GCP/Aqui/Recap/Refi/Capex); EuGB; MC/PC (only if source explicitly states collateral); Sukuk; ESN; Kangaroo; Samurai; sub-year par call
 - Boolean correlations: `covered`↔Covered Bond, `green`↔Green, `sustainable`↔Sustainable, `sustainabilityLinked`↔SLB, `social`↔Social, `seniorPreferred`↔SP, `seniorNonPreferred`↔SNP, `coc`↔CoC, `mwc`↔MWC, `cuc`↔CUC, `subordinated`↔Sub, `tier`↔AT1/T2
 - opCo/holdCo whitelist ONLY: UK/Swiss/US/JP banks + ING + Nationwide + Softbank; false for all others incl Korean, EM, covered bonds, corporates, SSA
