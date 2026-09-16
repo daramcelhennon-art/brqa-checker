@@ -43,6 +43,7 @@
 - additionalInfo book figure lagging by one stage — acceptable
 - Book Update headline without embedded `at <level>` — acceptable (char limit)
 - `Final Terms is …` as body opener — WRONG, never quote as a Fix
+- `Spread set at…` / `Yield set at…` / `Size set at…` / `<X> set at…` as body opener at Final Terms stage — all CORRECT; do NOT flag as stage mismatch; Final Terms body opener is flexible
 - Minor wording: "Original mandate as follows:" vs "Original mandate is as follows: -" — don't flag
 - Don't flag punctuation nits on established shorthand (excl JLM, incl JLM, T+X)
 - Fxd-to-Frn coupon structure / regulatory boilerplate — never flag missing
@@ -63,7 +64,7 @@
 - Level matches body + source (single-tranche only; multi-tranche = no level in headline)
 - Multi-tranche: `dual-tranche` for 2, `multi-tranche` for 3+; no per-tranche tenors
 - Size qualifiers: `(exp.)` for expected, `+` or `(min.)` for minimum, `(max.)` for maximum — placed after size, before tenor
-- Launched/Final Terms: two coherent forms — (A) `at <level>: Final Terms` or (B) `at <level>: Launched`; NEVER `… : Launched at <level>`
+- Launched/Final Terms: two forms — (A) Final Terms: `… at <level>: Final Terms` (level BEFORE colon); (B) Launched single-tranche: `… <tenor>: Launched at <level>` (level AFTER stage word); (C) Launched multi-tranche: `… dual-tranche: Launched` (no level); NEVER `… at <level>: Launched` (wrong — level must come after "Launched" not before the colon for Launched form)
 - `Revised guidance` when level moves between guidance updates (not `Guidance` or `Book update`)
 - Stage progression: Mandate → IPTs → Price talk → Guidance → Revised Guidance → Book Update → Spread set → Launched/Final Terms → Allocations → Priced
 - `Spread set` is a valid BR stage — spread fixed but deal not yet formally priced; do NOT flag as wrong stage or require priced-deal record
