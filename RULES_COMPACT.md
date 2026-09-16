@@ -96,7 +96,7 @@
 - `structure` — matches source (9-char cap); sub-2yr use fractional years (`1.5y` not `18m`)
 - `priceEvolution` — matches current level; `a` suffix for area (pre-spread-set); no `a` once firm; ~14 char limit
 - `bookOrRating` — HG: `JT-LEADS` if >3 BRs, bank name if ≤3; EM: ratings shorthand (M/S/F)
-- `timing` — matches source; Mandate format: `i/c DD Mon>` (calls) or `i/m DD Mon>` (meetings); `>` for series; dash for ranges; launch phrase beats call dates
+- `timing` — matches source; Mandate format: `i/c DD Mon>` (calls) or `i/m DD Mon>` (meetings); `>` for series; dash for ranges; launch phrase beats call dates; if source gives no specific date ("in the near future", "subject to market conditions"), vague timing is acceptable — don't flag format
 - `banks.active[]` count == source active-JLM count (dedupe first; Co-managers excluded)
 - `banks.passive[]` — GCs/Sr Co-Leads/passive JLMs only (NOT Co-managers)
 - Parent deal fields: body = `deal.message` (not `deal.body`); banks = `tranche.banks.active` (not `tranche.dealBanks.active`)
