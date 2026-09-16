@@ -90,6 +90,7 @@
   - Case B (no final book): `… Books last heard over EUR2.5bn.`
 - Timing statements: always end of latest live line, never on own line or attached to carried-forward paragraph
 - Book Update: previous timing removed from standing paragraph AND appended to Book update line
+- `Final books over` vs `Final books above` — interchangeable; don't flag either wording
 
 ## TRANCHE FORM RULES
 - `currency` — matches source
