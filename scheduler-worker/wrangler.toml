@@ -7,7 +7,7 @@ compatibility_date = "2026-01-01"
 # cron on public repos. If you ever want a different cadence, edit here
 # and re-deploy with `wrangler deploy`.
 [triggers]
-crons = ["*/10 * * * *"]
+crons = ["*/5 * * * *"]
 
 # GH_TOKEN is loaded from a Cloudflare secret at runtime (see README.md).
 # NOT set here — never commit secrets to the repo.

@@ -6,9 +6,9 @@
 // write" permission on the brqa-checker repo. Nothing else — the Worker
 // does not need Slack/BR access; it only rings GH's doorbell.
 
-const OWNER = "finnmarshall-lang";
+const OWNER = "daramcelhennon-art";
 const REPO = "brqa-checker";
-const WORKFLOW = "qa-tick.yml";
+const WORKFLOW = "qa-dispatch.yml";
 const REF = "main";
 
 export default {

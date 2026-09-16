@@ -104,6 +104,7 @@ jobs:
           echo "=== QA deal $TS $(date -u +%Y-%m-%dT%H:%M:%SZ) ===" | tee -a logs/qa.log
           claude -p "$(cat tick_shard_prompt.txt)" \
             --model claude-sonnet-5 \
+            --max-turns 3 \
             --dangerously-skip-permissions \
             >> logs/qa.log 2>&1
           echo "=== done $(date -u +%Y-%m-%dT%H:%M:%SZ) ===" | tee -a logs/qa.log

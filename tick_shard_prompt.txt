@@ -7,7 +7,7 @@ The working directory is the current directory (the repo root). Follow the workf
 - ./slack_file.py <file_id> for Bloomberg-forwarded HTML attachments
 - ./slack_post.py <channel> <thread_ts> - (message on stdin) for posting the finding — this posts as the BR QA bot and also refuses to post if the bot already replied in the thread. NEVER use `slack_send_message` MCP; that posts as Finn's account.
 - ./slack_react.py <channel> <message_ts> <emoji_name> for adding an emoji reaction to the term-sheet message itself (used to mark CLEAN verdicts with `:double-tick:` so the desk can see at a glance that a deal has passed QA).
-- Every rule file under ./memory/
+- ./RULES_COMPACT.md for ALL QA rules (consolidated — do NOT read individual memory/ files)
 
 Env vars already loaded: BR_USERNAME, BR_PASSWORD, SLACK_BOT_TOKEN, SHARD_FILE, STATE_DELTA_FILE.
 
