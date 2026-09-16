@@ -102,13 +102,19 @@ def main() -> int:
     })
     msgs = resp.get("messages") or []
 
+    ALREADY_QAD = {"double-tick", "exclamation"}
     candidates = []
     for m in msgs:
         ts = m.get("ts")
         if not ts or ts in state:
             continue
-        if any(r.get("name") == "white_check_mark" for r in (m.get("reactions") or [])):
-            candidates.append(m)
+        reactions = {r.get("name") for r in (m.get("reactions") or [])}
+        if not reactions & {"white_check_mark"}:
+            continue
+        if reactions & ALREADY_QAD:
+            # Bot already QA'd this — skip even if state.json is stale
+            continue
+        candidates.append(m)
 
     candidates.sort(key=lambda m: float(m["ts"]))
 
