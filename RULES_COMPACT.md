@@ -119,7 +119,7 @@
 - `emDetails.regionLatam`/`regionCeemea`/`regionAsia`/`feedEmrd` — correct for EM
 - `expectedPageId` populated pre-priced; clears on Priced (don't flag null on Priced)
 - `expectedPageCount` = min(len(tranches), 5) — pre-priced only
-- `hyExpectedPageId` — pre-priced only; clears on Priced (don't flag null on Priced)
+- `hyExpectedPageId` — pre-priced only; clears on Priced (don't flag null on Priced — same rule as expectedPageId)
 - `pricedDeals[]` empty at Allocations Out — NOT a flag (body-update stage only)
 - EM deals: skip regionAmericas check and pricedDeals[] empty check (HG-only)
 
