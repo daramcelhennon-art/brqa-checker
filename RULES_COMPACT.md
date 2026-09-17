@@ -136,6 +136,8 @@
 - `finalBooks` — MUST match body; null when source gave book size = flag
 - `finalBooks` vs `additionalInfo Books last heard` — mutually exclusive
 - `leagueTable` — true by default; false only for: maturity <18m (HG) / <365d (EM), size <USD100m equiv (HG only — size threshold does NOT apply to EM deals), ABS/CDO, domestic-only
+- Hard call/put BEFORE 18m (HG) or BEFORE 365d (EM) → `leagueTable=false`; Make Whole Calls are excluded from this rule (MWC does NOT disqualify)
+- NC1 structure (non-call 1 year = hard call at 12 months) → `leagueTable=false` for HG (12m < 18m threshold); ALWAYS flag `leagueTable=true` on any NC1 deal as a defect
 - `additionalInfo` required tags: HY → `UOP:` shorthand (GCP/Aqui/Recap/Refi/Capex); EuGB; MC/PC (only if source explicitly states collateral); Sukuk; ESN; Kangaroo; Samurai; sub-year par call
 - Boolean correlations: `covered`↔Covered Bond, `green`↔Green, `sustainable`↔Sustainable, `sustainabilityLinked`↔SLB, `social`↔Social, `seniorPreferred`↔SP, `seniorNonPreferred`↔SNP, `coc`↔CoC, `mwc`↔MWC, `cuc`↔CUC, `subordinated`↔Sub, `tier`↔AT1/T2
 - Blue Bond tranche: `green=true` MUST be set in the priced-deal form (blue bonds fall under the green classification); `additionalInfo` should also note "Blue Bond"
