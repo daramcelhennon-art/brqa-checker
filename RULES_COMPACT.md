@@ -87,6 +87,7 @@
 - Benchmark date format: spell out month + year (`OBL 2.1% April 2029`, not `04/29`)
 - House-style ordering: MWC before par call
 - ISIN only in body — never CUSIP
+- ISIN placement at Priced: single-tranche = end of closing paragraph; dual/multi-tranche = end of each tranche line; ALWAYS flag if ISIN is missing from body at Priced stage
 - Spread range from source must be preserved in full (not just one endpoint)
 - Per-tranche fields that differ go per-tranche, not in Common Terms
 - CHF/SARON body/headline: `SARON MS+X` (with MS); bare `SARON+X` is a defect
