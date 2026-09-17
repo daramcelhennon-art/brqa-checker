@@ -32,7 +32,7 @@
 - `equivalent`/`equiv.` in body — optional
 - No joined levels in multi-tranche headlines
 - BR `type` field (EXPECTED/PRICED) — internal workflow state, not deal stage
-- Structure field truncation (9-char cap, e.g. `11.5NC10` for `11.5NC10.5`) — by design
+- Structure field truncation (9-char cap, e.g. `11.5NC10` for `11.5NC10.5`) — by design; when structure includes a format flag (e.g. `Grn`), dropping decimals to fit is valid (e.g. `10NC5 Grn` for `10.5NC5.5 Grn` — exactly 9 chars); NEVER flag decimal truncation when combined structure + flag hits the 9-char limit
 - `(no books)` bank drops entirely from body and banks.active/passive
 - Tenders/LM/buyback/exchange/consent solicitation — verdict:"skipped", no post
 - Co-managers — NOT in banks.active OR banks.passive; only GCs/Sr Co-Leads/passive JLMs in passive
