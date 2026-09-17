@@ -5558,5 +5558,12 @@
   "1789636502.116449": {
     "checked_at": "2026-09-17T00:00:00Z",
     "verdict": "skipped"
+  },
+  "1789636558.610879": {
+    "checked_at": "2026-09-17T09:25:00Z",
+    "verdict": "flagged",
+    "br_id": 14670252,
+    "category": "hg",
+    "note": "Danske Bank EUR bmk 5NC4 SNP Update #1 (Books above EUR1.5bn) not reflected in BR \u2014 record still at IPTs MS+95bp area, dealHistoryEntries empty, changedAt 08:17:32 predates Slack ts by ~1hr. Flagged stage/body not progressed to Book update."
   }
 }
