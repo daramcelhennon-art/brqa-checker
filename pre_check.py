@@ -161,10 +161,18 @@ def check_deal(br: BondRadar, cat: str, deal: dict, source_text: str) -> list[st
             pd = None
 
         if pd:
-            # 5a. isin / figi / bloombergCode must all be populated
-            for field in ("isin", "figi", "bloombergCode"):
-                if not pd.get(field):
-                    flags.append(f"`{field}` — null → must be populated on priced record")
+            # 5a. isin / figi / bloombergCode must all be populated.
+            # Re-fetch once before flagging — priced form may not yet be saved
+            # if the associate is still entering codes when the bot runs.
+            missing_fields = [f for f in ("isin", "figi", "bloombergCode") if not pd.get(f)]
+            if missing_fields:
+                try:
+                    pd2 = br.get_priced_deal(cat, priced_id)
+                    missing_fields = [f for f in missing_fields if not pd2.get(f)]
+                except Exception:
+                    pass
+            for field in missing_fields:
+                flags.append(f"`{field}` — null → must be populated on priced record")
 
             # 5b. Exactly one format flag true
             true_flags = [f for f in FORMAT_FLAG_FIELDS if pd.get(f)]
@@ -199,11 +207,23 @@ def process_message(br: BondRadar, msg: dict, delta_path: str) -> str:
 
     # ── 2. Find deal in BR ─────────────────────────────────────────────────
     # Extract issuer from first *** / ★★★ / €€€ header line
+    # Bloomberg messages start with a stage word before the colon: "PRICED: Issuer Name..."
+    # In that case the stage word is NOT the issuer — use the text after the colon instead.
+    _STAGE_PREFIX_RE = re.compile(
+        r"^(PRICED|ICED|LAUNCH(?:ED)?|NEW\s+DEAL|FINAL\s+SPREAD|MANDATE"
+        r"|GUIDANCE|FINAL\s+TERMS|ALLOCAT(?:ED|IONS?)|BOOK\s+UPDATE"
+        r"|REVISED\s+GUIDANCE|UPDATE\s+\#?\d*|IPT[S]?)\s*[:\-]\s*",
+        re.IGNORECASE,
+    )
     issuer = None
     for line in text.splitlines():
         line = line.strip()
         # Strip common decorators
         clean = re.sub(r"^[*★€\s]+|[*★€\s]+$", "", line)
+        if not clean:
+            continue
+        # If line starts with a stage prefix word, strip it and use the remainder
+        clean = _STAGE_PREFIX_RE.sub("", clean)
         if not clean:
             continue
         # Take everything before the first " – " or ":"
