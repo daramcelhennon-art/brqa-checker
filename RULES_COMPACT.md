@@ -57,7 +57,9 @@
 
 ## HEADLINE RULES
 - Must start with `**` prefix (same-day deals only)
-- Elements: `** <Issuer> <CCY><Size> [qualifier] <Tenor/Structure> [format flags] [at <level>]: <Stage>`
+- Elements: `** <Issuer> <CCY><Size> [qualifier] <Tenor/Structure> [format flags]: <Stage> <level>` — level comes AFTER the stage word for ALL stages EXCEPT Final Terms
+- Final Terms exception: `** <Issuer> <CCY><Size> <Tenor> at <level>: Final Terms` — level before colon only for Final Terms
+- NEVER flag `**: IPTs T+120bp area` or `**: Guidance T+100bp` or `**: Launched at T+110bp` as wrong placement — these are all correct (level after stage word)
 - Format flags in headline: Grn, Soc, Sus, EuGB, CB, MC, T2, AT1, Sub, Sukuk, Kangaroo, Samurai, tap, add-on
 - NOT headline flags: 144A/RegS, SSN/Senior Secured, HoldCo, `(the #)`
 - Stage word must match body opener
