@@ -2,17 +2,9 @@ name: BR QA Checker
 
 on:
   schedule:
-    # Every 10 minutes on the dot. GH's cron is best-effort — public
-    # repos sometimes get scheduled runs skipped, especially overnight.
-    - cron: '*/10 * * * *'
-    # Explicit morning kickoff on weekdays. 06:35 UTC = 07:35 BST
-    # (UK summer time). GH schedules multiple listed entries independently,
-    # so adding this specific slot maximises the chance of a fire at the
-    # start of the trading day even if the main */10 cron got skipped
-    # for a while overnight.
-    # NB: when UK clocks go back in late October, 06:35 UTC becomes
-    # 06:35 GMT — bump this to '35 7 * * 1-5' at that point.
-    - cron: '35 6 * * 1-5'
+    # Every 5 minutes, weekdays, 07:00–23:00 BST (06:00–22:00 UTC).
+    # NB: when UK clocks go back in late October, adjust to 07:00–23:00 UTC.
+    - cron: '*/5 6-22 * * 1-5'
   workflow_dispatch: {}
 
 concurrency:
