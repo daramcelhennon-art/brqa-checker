@@ -41,7 +41,7 @@
 - MC/PC in additionalInfo — only flag if source explicitly states collateral type
 - `Books last heard:` colon-form vs `Books last heard over` in additionalInfo — both acceptable
 - additionalInfo book figure lagging by one stage — acceptable
-- Book Update headline without embedded `at <level>` — acceptable (char limit)
+- Book Update headline without embedded `at <level>` — acceptable (char limit); when level IS included, it goes BEFORE the colon: `… at <level>: Book update` (same as Final Terms/Allocations out); NEVER flag `at <level>: Book update` as wrong
 - `Final Terms is …` as body opener — WRONG, never quote as a Fix
 - `Spread set at…` / `Yield set at…` / `Size set at…` / `<X> set at…` as body opener at Final Terms stage — all CORRECT; do NOT flag as stage mismatch; Final Terms body opener is flexible
 - Minor wording: "Original mandate as follows:" vs "Original mandate is as follows: -" — don't flag
@@ -57,8 +57,10 @@
 
 ## HEADLINE RULES
 - Must start with `**` prefix (same-day deals only)
-- Elements: `** <Issuer> <CCY><Size> [qualifier] <Tenor/Structure> [format flags]: <Stage> <level>` — level comes AFTER the stage word for ALL stages EXCEPT Final Terms
-- Level BEFORE colon for: `Final Terms` and `Allocations out` — e.g. `** EUR750m 6.5y at MS+78bp: Allocations out`; `** USD750m 5y at T+195bp: Final Terms`
+- Elements: `** <Issuer> <CCY><Size> [qualifier] <Tenor/Structure> [format flags]: <Stage> <level>` — level comes AFTER the stage word for ALL stages EXCEPT Final Terms, Allocations out, and Book Update
+- Level BEFORE colon for: `Final Terms`, `Allocations out`, and `Book Update` — e.g. `** EUR750m 6.5y at MS+78bp: Allocations out`; `** USD750m 5y at T+195bp: Final Terms`; `** BPCE EUR bmk 6NC5 SNP at MS+140bp area: Book update`
+- Level is OPTIONAL at Book Update (acceptable to omit if no space): `** BPCE EUR bmk 6NC5 SNP: Book update` is also correct
+- NEVER flag `** <Issuer> … at <level>: Book update` as misplaced — level before colon is correct for Book Update
 - NEVER flag `**: IPTs T+120bp area` or `**: Guidance T+100bp` or `**: Launched at T+110bp` as wrong placement — these are all correct (level after stage word)
 - NEVER flag `** at <level>: Allocations out` as misplaced — level before colon is correct for Allocations out
 - Format flags in headline: Grn, Soc, Sus, EuGB, CB, MC, T2, AT1, Sub, Sukuk, Kangaroo, Samurai, tap, add-on
