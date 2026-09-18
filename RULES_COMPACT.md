@@ -63,6 +63,7 @@
 - NEVER flag `** <Issuer> … at <level>: Book update` as misplaced — level before colon is correct for Book Update
 - NEVER flag `**: IPTs T+120bp area` or `**: Guidance T+100bp` or `**: Launched at T+110bp` as wrong placement — these are all correct (level after stage word)
 - NEVER flag `** at <level>: Allocations out` as misplaced — level before colon is correct for Allocations out
+- `Allocations` and `Allocations out` are BOTH acceptable stage words in the headline — NEVER flag `Allocations` as incomplete or require `Allocations out`
 - Format flags in headline: Grn, Soc, Sus, EuGB, CB, MC, T2, AT1, Sub, Sukuk, Kangaroo, Samurai, tap, add-on
 - NOT headline flags: 144A/RegS, SSN/Senior Secured, HoldCo, `(the #)`
 - Stage word must match body opener
