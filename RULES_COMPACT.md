@@ -98,7 +98,7 @@
 - Mandate body Mode A: source gave prose paragraph → quote verbatim in `"..."`
 - Mandate body Mode B: source gave term-sheet bullets → paraphrase into `<Issuer> is planning a …`
 - Both modes require: mandate verb + banks + role, `may follow, subject to market conditions`, ratings (both issuer + expected issue when different), UOP, logistics coordinator
-- Book-line at Allocations: own line with `Book update:` prefix, MUST say `Final books over` (not `Books over`)
+- Book-line at Allocations: own line with `Book update:` prefix; use `Final books over` ONLY if the Allocations out source explicitly states the final books figure; if the figure comes from a prior Book Update (source at Allocations just says "allocations in the system" etc.), use `Books last heard over` instead — NEVER flag `Books last heard` as wrong at Allocations when the source did not give a final books figure
 - Book-line at Priced: NO new line, NO `Book update:` prefix; appended to end of closing paragraph
   - Case A (final books received, JLM disclosed): `… Final books over EUR1.2bn (incl. EUR250m JLM).`
   - Case A (no JLM disclosed): NO book line in body; `finalBooks` field only
@@ -170,7 +170,7 @@
 Strip source tenor prefixes (`3mS+`, `6mE+`, `3mL+`). Primary spread only (Gilts for GBP, Treasuries for USD); never post-reset margin.
 
 ## BOOK-LINE RULES (summary)
-- Allocations: `Book update: Final books over <X>.` — own line, prefix required, `Final` required
+- Allocations: own line, `Book update:` prefix required; `Final books over <X>.` when source gives final books at Allocations; `Books last heard over <X>.` when figure carries from a prior update (source didn't restate it)
 - Priced Case A (JLM disclosed): appended to closing paragraph: `Final books over <X> (incl. <Y> JLM).`
 - Priced Case A (no JLM figure — source omits JLM amount or says `excl. JLM` without a figure): NO book line in body at all; `finalBooks` field in priced-deal form only — never suggest appending `(excl. JLM)` to body
 - Priced Case B: appended: `Books last heard over <X>.`; mirror in `additionalInfo`; `finalBooks` null
