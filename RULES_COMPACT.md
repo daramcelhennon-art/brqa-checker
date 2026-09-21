@@ -35,7 +35,7 @@
 - Structure field truncation (9-char cap, e.g. `11.5NC10` for `11.5NC10.5`) — by design; when structure includes a format flag (e.g. `Grn`), dropping decimals to fit within 9 chars is valid (e.g. `10NC5 Grn` = 9 chars is correct for `10.5NC5.5 Grn` = 13 chars); NEVER flag truncation when the stored value is ≤9 chars; NEVER suggest a fix that itself exceeds 9 chars — always count characters of the proposed value before flagging
 - `(no books)` bank drops entirely from body and banks.active/passive
 - Tenders/LM/buyback/exchange/consent solicitation — verdict:"skipped", no post
-- Co-managers — NOT in banks.active OR banks.passive; only GCs/Sr Co-Leads/passive JLMs in passive
+- Co-managers — NOT in banks.active OR banks.passive; only GCs/Sr Co-Leads/passive JLMs in passive; NEVER flag a Co-Lead Manager / Co-manager as missing from banks.passive — their absence is correct by design; they may appear in body text but are excluded from both arrays
 - `JLNB` (Joint Lead Non-Books) — NOT in banks.active OR banks.passive; excluded same as co-managers
 - "X to B&D" — role designation among existing JBRs, never changes bank counts
 - MC/PC in additionalInfo — only flag if source explicitly states collateral type
