@@ -112,7 +112,7 @@
 - `volume` — matches source (`bmk`, `300m`, `1bn`)
 - `structure` — matches source (9-char cap); sub-2yr use fractional years (`1.5y` not `18m`)
 - `priceEvolution` — matches current level; `a` suffix for area (pre-spread-set); no `a` once firm; ~14 char limit; a range format (e.g. `MS+145/150`) already implies area — NEVER add `a` suffix to a range; `a` suffix only required on single-point levels (e.g. `MS+105a`)
-- `bookOrRating` — HG: `JT-LEADS` if >3 BRs, bank name if ≤3; EM: ratings shorthand (M/S/F)
+- `bookOrRating` — HG: `JT-LEADS` if >3 BRs, bank name if ≤3; EM: ratings shorthand (M/S/F) — use EXPECTED ISSUE ratings (not obligor/guarantor ratings); when issue rating differs from obligor rating, the issue rating is correct — NEVER flag it as missing the obligor's rating
 - `timing` — matches source; Mandate format: `i/c DD Mon>` (calls) or `i/m DD Mon>` (meetings); `>` for series; dash for ranges; launch phrase beats call dates; if source gives no specific date ("in the near future", "subject to market conditions"), vague timing is acceptable — don't flag format; NEVER flag `this week` when source says "in the near future" or "near future, subject to market conditions" — `this week` is the correct BR encoding for that phrasing; if near end of week, `w/c DD Mon` with the following Monday's date (e.g. `w/c 20 Sep`) is also acceptable
 - When source explicitly states a pricing day (e.g. "pricing Friday", "pricing today"), timing = that day name (e.g. `Friday`) — this overrides any investor call date; NEVER flag a pricing-day timing as wrong because a call date also exists in the source
 - `banks.active[]` count == source active-JLM count (dedupe first; Co-managers excluded)
