@@ -197,7 +197,11 @@ def process_message(br: BondRadar, msg: dict, delta_path: str) -> str:
     text = msg.get("text") or ""
 
     # ── 1. Non-deal skip ───────────────────────────────────────────────────
-    if NON_DEAL_PATTERNS.search(text):
+    # Only check the first 5 lines — real tender/LM/buyback messages declare
+    # themselves at the top. New-issue messages that merely mention "Tender Offer"
+    # in use-of-proceeds deep in the body must not be skipped.
+    header_text = "\n".join(text.splitlines()[:5])
+    if NON_DEAL_PATTERNS.search(header_text):
         print(f"  {ts}: non-deal keywords detected — skipping")
         _write_delta(delta_path, ts, "skipped")
         return "skipped"
