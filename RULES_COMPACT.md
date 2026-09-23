@@ -45,7 +45,8 @@
 - additionalInfo book figure lagging by one stage — acceptable
 - Book Update headline without embedded `at <level>` — acceptable (char limit); when level IS included, it goes BEFORE the colon: `… at <level>: Book update` (same as Final Terms/Allocations out); NEVER flag `at <level>: Book update` as wrong
 - `Final Terms is …` as body opener — WRONG, never quote as a Fix
-- `Spread set at…` / `Yield set at…` / `Size set at…` / `<X> set at…` as body opener at Final Terms stage — all CORRECT; do NOT flag as stage mismatch; Final Terms body opener is flexible
+- **`Spread set at…` vs `Yield set at…` at Final Terms / Priced — CRITICAL**: `Spread set at MS+78bp` is correct when the level is a benchmark spread. `Yield set at 5.825%` is correct when the level is a yield/coupon percentage. Using `Spread set at 5.825%` when 5.825% is a yield is WRONG — flag it and fix to `Yield set at 5.825%`. Likewise `Coupon set at X%` is correct for fixed-coupon phrasing. The distinguishing test: if the level contains a `%` with no benchmark prefix (MS+, T+, UKT+, E+, SONIA+, etc.), it is a yield, not a spread.
+- `Size set at…` / `<X> set at…` as body opener at Final Terms stage — acceptable forms; do NOT flag as stage mismatch; Final Terms body opener is flexible
 - Minor wording: "Original mandate as follows:" vs "Original mandate is as follows: -" — don't flag
 - Don't flag punctuation nits on established shorthand (excl JLM, incl JLM, T+X)
 - Fxd-to-Frn coupon structure / regulatory boilerplate — never flag missing
