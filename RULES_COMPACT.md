@@ -92,6 +92,7 @@
 - Opener format: `<Stage phrase> is <level> for <Borrower>'s <size> <structure> <ranking> <Notes/Bonds>, due <maturity>.`
 - Priced opener: `Priced: <size>, coupon <X>%, due <date>.`
 - Multi-tranche opens `Tranche A:` + `Tranche B:` + `Common terms:` — never `Launched:` opener
+- Allocations out body opener — there is NO required prefix; NEVER flag body opener at Allocations / Allocations out stage; the body is free-form (e.g. "Allocations out now. Size set at…" with no stage-prefix rule)
 - Check `Common terms:` count == 1 on multi-tranche (duplicated = defect)
 - Body strips accents/diacritics — flag if accents remain (except at Mandated stage)
 - Benchmark date format: spell out month + year (`OBL 2.1% April 2029`, not `04/29`)
