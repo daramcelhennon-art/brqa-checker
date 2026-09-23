@@ -8,7 +8,7 @@
 - Level embed missing at Book Update or Allocations headline — optional
 - `(Excl. JLMs)` qualifier missing from body — optional (but `(Incl. Xm JLM)` with figure IS required)
 - Hedge reference bond / hedge ratio in body — source-only, never flag missing
-- Tax-changes call / withholding-tax / tax-deductibility — never flag missing; flag as REMOVE if present
+- Tax-changes call / withholding-tax / tax-deductibility — never flag missing; flag as REMOVE if present as standalone disclosure text; NEVER flag "Rating Event / Tax Deductibility Event call at 101" in hybrid body — that is a standard structural call provision, not stray text
 - `SNP` in headline on Canadian bail-inable — use `bail-inable` instead; only priced-form `seniorNonPreferred=true`
 - `ggb` on priced-form — never propose `ggb=true`; only propose `ggb=false` if currently true
 - `nonBullet=Y` — never propose; valid values are NC codes (`16NC6`) or `N`
