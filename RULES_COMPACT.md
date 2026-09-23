@@ -55,6 +55,7 @@
 - Missing benchmark ref (UKT/UST/DBR/OAT) — pricing-stage only; added when a spread is set relative to it. Never flag at IPTs/Guidance/Launched (benchmark comes at pricing)
 - FRN priceEvolution drops tenor prefix (`E+55a` not `3mE+55a`)
 - CITIC Securities + China CITIC Bank Intl = one BR bank ID; don't flag 1-gap
+- BOCOM + Bank of Communications = same bank, one BR bank ID; if source lists both names, count as 1 and don't flag the gap
 - priceEvolution one-digit truncation when full value exceeds ~14 char field limit — by design
 - Tranche `volume` field character limit — if the source size (e.g. CNY2.024bn) doesn't fit and the associate has entered a rounded value (e.g. 2.02bn), do NOT flag the rounding as a mismatch. Never suggest a value that doesn't fit in the field.
 - 1-year par call NOT in additionalInfo — only sub-year atypical windows (2mo/3mo/6mo)
