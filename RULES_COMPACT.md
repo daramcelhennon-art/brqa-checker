@@ -8,6 +8,7 @@
 - Level embed missing at Book Update or Allocations headline — optional
 - `(Excl. JLMs)` qualifier missing from body — optional (but `(Incl. Xm JLM)` with figure IS required)
 - Hedge reference bond / hedge ratio in body — source-only, never flag missing
+- Term loan / ABL cross-reference amounts in proceeds description — NEVER flag as stale when source says "term loan revised to $X". The proceeds description reflects the original capital structure at deal launch; term loan revisions (often made alongside a bond downsizing) do not require updating the proceeds cross-reference in the body.
 - `Books subject [time] / [time]` — hedge/books deadline timing line; goes at end of body paragraph as plain text; never flag its presence, absence or format AS STANDALONE TEXT; BUT if it appears after a `Book update:` prefix with no actual book figure (e.g. `Book update: Books subject at 12.50 UKT/13.50 CET.` with no size), that IS wrong — flag: `Book update:` section must contain a book size, not just a timing line
 - Tax-changes call / withholding-tax / tax-deductibility — never flag missing; flag as REMOVE if present as standalone disclosure text; NEVER flag "Rating Event / Tax Deductibility Event call at 101" in hybrid body — that is a standard structural call provision, not stray text
 - `SNP` in headline on Canadian bail-inable — use `bail-inable` instead; only priced-form `seniorNonPreferred=true`
