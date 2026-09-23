@@ -46,7 +46,7 @@ NON_DEAL_PATTERNS = re.compile(
 # ── stage detection ────────────────────────────────────────────────────────
 STAGE_RE = re.compile(
     r":\s*(Priced|Allocations\s+Out|Allocations|Book\s+Update|Revised\s+Guidance"
-    r"|Guidance|Launched|Final\s+Terms|IPTs|Mandate)\s*$",
+    r"|Guidance|Launched|Final\s+Terms|IPTs|Mandate)(?:\s+at\b[^:]*)?$",
     re.IGNORECASE,
 )
 
