@@ -74,7 +74,7 @@
 - Level matches body + source (single-tranche only; multi-tranche = no level in headline)
 - Multi-tranche: `dual-tranche` for 2, `multi-tranche` for 3+; no per-tranche tenors
 - Size qualifiers: `(exp.)` for expected, `+` or `(min.)` for minimum, `(max.)` for maximum — placed after size, before tenor
-- Launched/Final Terms: two forms — (A) Final Terms: `… at <level>: Final Terms` (level BEFORE colon); (B) Launched single-tranche: `… <tenor>: Launched at <level>` (level AFTER stage word); (C) Launched multi-tranche: `… dual-tranche: Launched` (no level); NEVER `… at <level>: Launched` (wrong — level must come after "Launched" not before the colon for Launched form)
+- Launched/Final Terms: "Launched" and "Final Terms" are interchangeable stage words for the same deal stage — NEVER force one over the other because Bloomberg source says "FINAL TERMS" or "LAUNCHED". Valid headline forms: (A) `… at <level>: Final Terms` (level BEFORE colon, Final Terms stage word); (B) `… <tenor>: Launched at <level>` (level AFTER stage word, Launched stage word); (C) `… dual-tranche: Launched` (multi-tranche, no level). Body opener matches: (A) direct summary / `Yield set at…` / `Spread set at…` (no stage prefix); (B) + (C) `Launched: Size set at…`. NEVER `… at <level>: Launched` (level before colon is wrong for Launched form — level must come AFTER the stage word).
 - `Revised guidance` when level moves between guidance updates (not `Guidance` or `Book update`)
 - Stage progression: Mandate → IPTs → Price talk → Guidance → Revised Guidance → Book Update → Spread set → Launched/Final Terms → Allocations → Priced
 - `Spread set` is a valid BR stage — spread fixed but deal not yet formally priced; do NOT flag as wrong stage or require priced-deal record
