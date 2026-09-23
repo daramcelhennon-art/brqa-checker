@@ -60,6 +60,7 @@
 ## HEADLINE RULES
 - Must start with `**` prefix (same-day deals only)
 - Elements: `** <Issuer> <CCY><Size> [qualifier] <Tenor/Structure> [format flags]: <Stage> <level>` — level comes AFTER the stage word for ALL stages EXCEPT Final Terms, Allocations out, and Book Update
+- **`bmk` / `benchmark` in the headline MUST be replaced with the actual size once the deal has sized.** `bmk` is only acceptable at IPTs / Guidance / Book Update when the size is not yet set. At Launched, Final Terms, Priced, and Allocations: if source shows a specific size (e.g. EUR500m), `bmk` in the headline is WRONG — flag it and give the specific size as the fix. Same rule applies to the tranche form `volume` field.
 - Level BEFORE colon for: `Final Terms`, `Allocations out`, and `Book Update` — e.g. `** EUR750m 6.5y at MS+78bp: Allocations out`; `** USD750m 5y at T+195bp: Final Terms`; `** BPCE EUR bmk 6NC5 SNP at MS+140bp area: Book update`
 - Level is OPTIONAL at Book Update (acceptable to omit if no space): `** BPCE EUR bmk 6NC5 SNP: Book update` is also correct
 - NEVER flag `** <Issuer> … at <level>: Book update` as misplaced — level before colon is correct for Book Update
