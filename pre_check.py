@@ -132,12 +132,7 @@ def check_deal(br: BondRadar, cat: str, deal: dict, source_text: str) -> list[st
     hg = deal.get("hgDetails") or {}
     em = deal.get("emDetails") or {}
 
-    # 1. Always-true fields
-    for field in ("activeWeb", "activeBloomberg", "notifyMobile"):
-        if not deal.get(field):
-            flags.append(f"`{field}` — false → must be true")
-
-    # 2. highYield requires hyExpectedPageId (pre-priced only)
+    # 1. highYield requires hyExpectedPageId (pre-priced only)
     if hg.get("highYield") and stage != "priced":
         hype = hg.get("hyExpectedPageId")
         if not hype:
