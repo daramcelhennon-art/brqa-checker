@@ -37,7 +37,9 @@ CHANNEL = "C09JX51GAKH"
 # ── non-deal keyword filter ────────────────────────────────────────────────
 NON_DEAL_PATTERNS = re.compile(
     r"\b(tender offer|exchange offer|consent solicitation|liability management"
-    r"|buyback|buy-back|LM exercise|repurchase offer|make whole|self tender)\b",
+    r"|buyback|buy-back|LM exercise|repurchase offer|self tender"
+    # "make whole" only in LM context — NOT "make whole call" which is a bond covenant
+    r"|make whole\s+(?:offer|redemption|purchase|tender))\b",
     re.IGNORECASE,
 )
 
