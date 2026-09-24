@@ -20,6 +20,7 @@
 - Sale-into-Canada / Clearing lines missing — never flag
 - Stage-word casing (`Final terms`/`Final Terms`, `Book update`/`book update`) — flexible, never flag
 - `Rev Guidance` in headline — acceptable abbreviation for `Revised Guidance`; NEVER flag as wrong or require the full form
+- `IPG` in headline — acceptable abbreviation for `Initial Price Guidance` / `Initial Guidance`; NEVER flag as wrong or require the full form (Bloomberg blasts use IPG)
 - `SARON MS+` in body/headline on CHF deals — correct, do NOT drop the MS
 - Tranche form `timing: "launched"` at Allocations Out — correct carry-forward
 - `priceEvolution` at Launched may stay at guidance level — don't flag pe=guidance vs body=launched-spread
