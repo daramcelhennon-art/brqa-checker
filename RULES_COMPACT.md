@@ -55,6 +55,7 @@
 - SMR / List / Law when source didn't provide them — never flag
 - Missing benchmark ref (UKT/UST/DBR/OAT) — pricing-stage only; added when a spread is set relative to it. Never flag at IPTs/Guidance/Launched (benchmark comes at pricing)
 - FRN priceEvolution drops tenor prefix (`E+55a` not `3mE+55a`)
+- Spread `a` shorthand (e.g. `MS+100a`) — valid ONLY in `priceEvolution` fields; NEVER in the headline or body. Headline and body must use full form `MS+100bp area`. Flag `MS+100a` in headline as wrong.
 - CITIC Securities + China CITIC Bank Intl = one BR bank ID; don't flag 1-gap
 - BOCOM / Bank of Communications / BOCOM International = same BR bank ID; source may list "Bank of Communications" and "BOCOM International" as separate entries — count as 1, don't flag the gap
 - priceEvolution one-digit truncation when full value exceeds ~14 char field limit — by design
