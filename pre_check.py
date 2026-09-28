@@ -158,31 +158,19 @@ def check_deal(br: BondRadar, cat: str, deal: dict, source_text: str) -> list[st
             pd = None
 
         if pd:
-            # 5a. Required priced-form fields.
-            # Re-fetch once before flagging — form may not yet be saved when bot runs.
-            # isin/figi/bloombergCode: always required.
-            # fpr (reoffer price) + spread: always required.
-            # yield: required for fixed-rate deals (FRN cpn contains letters e.g. "SOFR+91").
-            _cpn = str(pd.get("cpn") or "")
-            _is_frn = bool(re.search(r"[A-Za-z]", _cpn))
-            _required = ["isin", "figi", "bloombergCode"]
-            if pd.get("fpr") is None:
-                _required.append("fpr")
-            if not pd.get("spread"):
-                _required.append("spread")
-            if not _is_frn and pd.get("yield") is None:
-                _required.append("yield")
-            missing_fields = [f for f in _required if not pd.get(f) and pd.get(f) != 0.0]
+            # 5a. isin / figi / bloombergCode must all be populated.
+            # Re-fetch once before flagging — priced form may not yet be saved
+            # if the associate is still entering codes when the bot runs.
+            # spread / yield / fpr are source-dependent — Claude checks those.
+            missing_fields = [f for f in ("isin", "figi", "bloombergCode") if not pd.get(f)]
             if missing_fields:
                 try:
                     pd2 = br.get_priced_deal(cat, priced_id)
-                    missing_fields = [f for f in missing_fields if not pd2.get(f) and pd2.get(f) != 0.0]
+                    missing_fields = [f for f in missing_fields if not pd2.get(f)]
                 except Exception:
                     pass
-            _labels = {"fpr": "reoffer price", "spread": "spread", "yield": "yield"}
             for field in missing_fields:
-                label = _labels.get(field, field)
-                flags.append(f"`{field}` — null → must be populated on priced record ({label})")
+                flags.append(f"`{field}` — null → must be populated on priced record")
 
             # 5b. Exactly one format flag true
             true_flags = [f for f in FORMAT_FLAG_FIELDS if pd.get(f)]

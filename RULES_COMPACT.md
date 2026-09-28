@@ -153,6 +153,7 @@
 - Dual-ISIN: only one stored (usually RegS `XS…`); don't flag other missing
 - Format flags: EXACTLY ONE true of `dealRegsOnly`/`deal144aOnly`/`deal144aRegs`/`secRegistered`/`hg3a2`/`hgSecExempt`
 - `finalBooks` — MUST match body; null when source gave book size = flag
+- `fpr` (reoffer price), `spread`, `yield` — **flag only when source provides the value but the priced form field is null**: if source gives a reoffer price → `fpr` must be populated; if source gives a benchmark spread (e.g. T+219bp, MS+78bp) → `spread` must be populated; if source gives a yield/YTM → `yield` must be populated. Do NOT flag these as missing if the source does not provide them (some deals have no benchmark spread; FRN deals often have no yield).
 - `finalBooks` vs `additionalInfo Books last heard` — mutually exclusive
 - `leagueTable` — true by default; false only for: maturity <18m (HG) / <365d (EM), size <USD100m equiv (HG only — size threshold does NOT apply to EM deals), ABS/CDO, domestic-only
 - Hard call/put BEFORE 18m (HG) or BEFORE 365d (EM) → `leagueTable=false`; Make Whole Calls are excluded from this rule (MWC does NOT disqualify)
