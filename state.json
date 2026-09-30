@@ -7950,5 +7950,9 @@
     "checked_at": "2026-09-30T15:23:57+00:00",
     "verdict": "flagged",
     "note": "Paramount USD30bn multi-tranche 1L, id 14690188, Launched. Headline \u2713 (multi-tranche, no per-tranche level, matches source). Body \u2713 (Tranche A-H spreads/ISINs/par calls match source, Common terms count=1, bookrunners APGLSC/BofA/Citi listed). Deal flags \u2713 (activeWeb/BBG/notify=T, regionAmericas=T, highYield=F correct crossover-IG since BBB-/BBB-, expectedPageId=IGRB137, expectedPageCount=5). No priced form yet (Launched stage). FLAGGED: tranche form bookOrRating='JT-LEADS' on all 8 tranches (A-H) but banks.active=3 ([166,179,188890]=APGLSC/BofA/Citi) which is \u22643 -> should be bank-name abbreviation not JT-LEADS (rule: JT-LEADS only if >3 BRs). Prior tranche history correctly showed 'BofA/C' before flipping to JT-LEADS when APGLSC joined."
+  },
+  "1790781753.625109": {
+    "checked_at": "2026-09-30T00:00:00Z",
+    "verdict": "flagged"
   }
 }
