@@ -109,6 +109,7 @@
 - ISIN only in body — never CUSIP
 - ISIN placement at Priced: single-tranche = end of closing paragraph; dual/multi-tranche = end of each tranche line; ALWAYS flag if ISIN is missing from body at Priced stage
 - Spread range from source must be preserved in full (not just one endpoint)
+- `area` is redundant after a range — `8.75/9.25%` and `MS+130/135bp` already imply area; flag body opener `X/Y% area` → `X/Y%` (same rule as priceEvolution field where `a` suffix is never added to ranges)
 - Per-tranche fields that differ go per-tranche, not in Common Terms
 - CHF/SARON body/headline: `SARON MS+X` (with MS); bare `SARON+X` is a defect
 - Mandate body Mode A: source gave prose paragraph → quote verbatim in `"..."`
@@ -116,7 +117,7 @@
 - **Roadshow Update / Timing Update body format** — two parts: (1) update content as a **prose paragraph** (source bullets joined with `. `, no bullet formatting); (2) `Original mandate is as follows:` on a new line; (3) the full original mandate body in quotes below. Flag if: bullets not joined to prose, `Original mandate is as follows:` line missing, or original mandate body absent.
 - Both modes require: mandate verb + banks + role, ratings (both issuer + expected issue when different), UOP, logistics coordinator
 - `may follow, subject to market conditions` — preferred but NEVER required; NEVER flag its absence from the mandate body
-- **`Book update:` must ALWAYS be on its own new line** at every stage (Book Update, Rev Guidance, Guidance, Spread set, etc.) — flag if it appears inline at the end of a body paragraph. The ONLY exception is Priced stage where the book figure is appended inline to the closing paragraph with no `Book update:` prefix.
+- **`Book update:` is ONLY for genuine investor demand figures** (e.g. `Book update: Books over EUR1.2bn. Books open, today's business.`) — must be on its own new line; timing goes AFTER the figure on the same `Book update:` line. `Book update:` is WRONG if the line contains only: deal/bond sizing ("Size set at CHF115m"), timing only, or "Books open" with no demand figure — these go inline at the end of the body paragraph with no `Book update:` prefix. The ONLY exception for genuine demand figures is Priced stage where the book figure is appended inline to the closing paragraph with no prefix.
 - Book-line at Allocations: own line with `Book update:` prefix; use `Final books over` ONLY if the Allocations out source explicitly states the final books figure; if the figure comes from a prior Book Update (source at Allocations just says "allocations in the system" etc.), use `Books last heard over` instead — NEVER flag `Books last heard` as wrong at Allocations when the source did not give a final books figure
 - Book-line at Priced: NO new line, NO `Book update:` prefix; appended to end of closing paragraph
   - Case A (final books received, JLM disclosed): `… Final books over EUR1.2bn (incl. EUR250m JLM).`
@@ -192,7 +193,7 @@
 Strip source tenor prefixes (`3mS+`, `6mE+`, `3mL+`). Primary spread only (Gilts for GBP, Treasuries for USD); never post-reset margin.
 
 ## BOOK-LINE RULES (summary)
-- **`Book update:` is ALWAYS on its own new line** at every stage except Priced — flag any `Book update:` that is inline/appended to a body paragraph at non-Priced stages
+- **`Book update:` = genuine demand figure only, own line, timing appended after on the same line** — e.g. `Book update: Books over EUR1.2bn. Books open, today's business.`; if no demand figure, timing/sizing goes inline at end of paragraph with no prefix
 - Allocations: own line, `Book update:` prefix required; `Final books over <X>.` when source gives final books at Allocations; `Books last heard over <X>.` when figure carries from a prior update (source didn't restate it)
 - Priced Case A (JLM disclosed): appended to closing paragraph: `Final books over <X> (incl. <Y> JLM).`
 - Priced Case A (no JLM figure — source omits JLM amount or says `excl. JLM` without a figure): NO book line in body at all; `finalBooks` field in priced-deal form only — never suggest appending `(excl. JLM)` to body
