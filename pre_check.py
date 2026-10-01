@@ -224,6 +224,10 @@ def process_message(br: BondRadar, msg: dict, delta_path: str) -> str:
         clean = re.sub(r"^[*★€\s]+|[*★€\s]+$", "", line)
         if not clean:
             continue
+        # If the first meaningful line is a bullet point, the message has no issuer
+        # header — defer to Claude (e.g. update messages that start with "- Tap 2031:")
+        if clean.startswith("-"):
+            break
         # If line starts with a stage prefix word, strip it and use the remainder
         clean = _STAGE_PREFIX_RE.sub("", clean)
         if not clean:

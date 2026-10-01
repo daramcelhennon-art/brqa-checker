@@ -4,6 +4,8 @@
 - Timezone labels (CET/CEST/UKT/BST/EST/EDT/JST/HKT) — never check, never flag in any direction
 - ESG short/long form in headline (Grn↔Green, Soc↔Social, Sus↔Sustainable) — interchangeable
 - `(equiv. MS+X)` / `SOFR equivalent` in body — optional, never flag presence or absence
+- `may follow, subject to market conditions` in mandate body — preferred but NEVER required; NEVER flag its absence
+- **`bookOrRating` with exactly 3 BRs — NEVER FLAG regardless of whether JT-LEADS or bank names are used; both are correct at 3 banks; only flag at ≤2 BRs (must use bank names)**
 - WNG marker missing from headline — optional
 - Level embed missing at Book Update or Allocations headline — optional
 - `(Excl. JLMs)` qualifier missing from body — optional (but `(Incl. Xm JLM)` with figure IS required)
@@ -39,7 +41,7 @@
 - Structure field truncation (9-char cap, e.g. `11.5NC10` for `11.5NC10.5`) — by design; when structure includes a format flag (e.g. `Grn`), dropping decimals to fit within 9 chars is valid (e.g. `10NC5 Grn` = 9 chars is correct for `10.5NC5.5 Grn` = 13 chars); NEVER flag truncation when the stored value is ≤9 chars; NEVER suggest a fix that itself exceeds 9 chars — always count characters of the proposed value before flagging
 - `(no books)` bank drops entirely from body and banks.active/passive
 - Tenders/LM/buyback/exchange/consent solicitation — verdict:"skipped", no post
-- Co-managers — NOT in banks.active OR banks.passive; only GCs/Sr Co-Leads/passive JLMs in passive; NEVER flag a Co-Lead Manager / Co-manager as missing from banks.passive — their absence is correct by design; they may appear in body text but are excluded from both arrays
+- **Co-managers and Senior Co-Managers — NEVER in banks.active OR banks.passive; excluded from both arrays entirely** — NEVER flag their absence from passive; NEVER suggest adding them to passive; they may appear in source/body text but are excluded from BR bank arrays by design. This applies to all co-manager labels: Co-Manager, Senior Co-Manager, Co-Lead Manager, JLNB.
 - `JLNB` (Joint Lead Non-Books) — NOT in banks.active OR banks.passive; excluded same as co-managers
 - "X to B&D" — role designation among existing JBRs, never changes bank counts
 - MC/PC in additionalInfo — only flag if source explicitly states collateral type
@@ -68,9 +70,10 @@
 - Must start with `**` prefix (same-day deals only)
 - Elements: `** <Issuer> <CCY><Size> [qualifier] <Tenor/Structure> [format flags]: <Stage> <level>` — level comes AFTER the stage word for ALL stages EXCEPT Final Terms, Allocations out, and Book Update
 - **`bmk` / `benchmark` in the headline MUST be replaced with the actual size once the deal has sized.** `bmk` is only acceptable at IPTs / Guidance / Book Update when the size is not yet set. At Launched, Final Terms, Priced, and Allocations: if source shows a specific size (e.g. EUR500m), `bmk` in the headline is WRONG — flag it and give the specific size as the fix. Same rule applies to the tranche form `volume` field.
-- Level BEFORE colon for: `Final Terms`, `Allocations out`, and `Book Update` — e.g. `** EUR750m 6.5y at MS+78bp: Allocations out`; `** USD750m 5y at T+195bp: Final Terms`; `** BPCE EUR bmk 6NC5 SNP at MS+140bp area: Book update`
+- Level BEFORE colon for: `Final Terms`, `Allocations out`, `Book Update`, and `Size update` — e.g. `** EUR750m 6.5y at MS+78bp: Allocations out`; `** USD750m 5y at T+195bp: Final Terms`; `** BPCE EUR bmk 6NC5 SNP at MS+140bp area: Book update`; `** Republic of Finland CHF125m 10-year at SARON MS+23bp: Size update`
 - Level is OPTIONAL at Book Update (acceptable to omit if no space): `** BPCE EUR bmk 6NC5 SNP: Book update` is also correct
 - NEVER flag `** <Issuer> … at <level>: Book update` as misplaced — level before colon is correct for Book Update
+- NEVER flag `** <Issuer> … at <level>: Size update` as misplaced — level before colon is correct for Size update (same rule as Book Update)
 - NEVER flag `**: IPTs T+120bp area` or `**: Guidance T+100bp` or `**: Launched at T+110bp` as wrong placement — these are all correct (level after stage word)
 - NEVER flag `** at <level>: Allocations out` as misplaced — level before colon is correct for Allocations out
 - `Allocations` and `Allocations out` are BOTH acceptable stage words in the headline — NEVER flag `Allocations` as incomplete or require `Allocations out`
@@ -85,6 +88,7 @@
 - Stage progression: Mandate → IPTs → Price talk → Guidance → Revised Guidance → Book Update → Spread set → Launched/Final Terms → Allocations → Priced → Book stats (post-pricing allocation stats)
 - **Book stats headline** — when a Bloomberg BOOKSTATS message arrives, the BR headline MUST be updated to `** <Issuer> <CCY><Size> <tenor> at <level>: Book stats` (level before colon, same as Book Update/Allocations out). If the headline still shows a prior stage (e.g. `Priced`) when the Book Stats source has arrived, flag it. Example: `** Slovak Republic EUR2.5bn 10Y at MS+77bp: Book stats`. Level is the final pricing level (same as Priced headline level).
 - `Spread set` is a valid BR stage — spread fixed but deal not yet formally priced; do NOT flag as wrong stage or require priced-deal record
+- `Upsized` and `Size update` are valid BR stage words — used when source announces a change in deal size (e.g. benchmark → firm minimum); NEVER flag as non-standard; level goes BEFORE the colon (same rule as Book Update)
 - `Price talk` is a valid BR stage word — used when source says "PRICE TALK" after a prior IPTs stage (narrowed range before final guidance); body opener: `Price talk is X% for <Issuer>'s...`
 - NEVER upgrade source "Price Talk" to "Guidance" in the flag — if source says "Price Talk", the BR stage Price Talk is CORRECT; only flag as wrong stage if source explicitly says "Guidance"
 - When source updates BOTH size and level at Price Talk (e.g. size upsized + spread range revised), headline must reflect both changes: `** <Issuer> <new size> <tenor>: Price Talk <new range>` — flag if either size or level is stale
@@ -109,7 +113,10 @@
 - CHF/SARON body/headline: `SARON MS+X` (with MS); bare `SARON+X` is a defect
 - Mandate body Mode A: source gave prose paragraph → quote verbatim in `"..."`
 - Mandate body Mode B: source gave term-sheet bullets → paraphrase into `<Issuer> is planning a …`
-- Both modes require: mandate verb + banks + role, `may follow, subject to market conditions`, ratings (both issuer + expected issue when different), UOP, logistics coordinator
+- **Roadshow Update / Timing Update body format** — two parts: (1) update content as a **prose paragraph** (source bullets joined with `. `, no bullet formatting); (2) `Original mandate is as follows:` on a new line; (3) the full original mandate body in quotes below. Flag if: bullets not joined to prose, `Original mandate is as follows:` line missing, or original mandate body absent.
+- Both modes require: mandate verb + banks + role, ratings (both issuer + expected issue when different), UOP, logistics coordinator
+- `may follow, subject to market conditions` — preferred but NEVER required; NEVER flag its absence from the mandate body
+- **`Book update:` must ALWAYS be on its own new line** at every stage (Book Update, Rev Guidance, Guidance, Spread set, etc.) — flag if it appears inline at the end of a body paragraph. The ONLY exception is Priced stage where the book figure is appended inline to the closing paragraph with no `Book update:` prefix.
 - Book-line at Allocations: own line with `Book update:` prefix; use `Final books over` ONLY if the Allocations out source explicitly states the final books figure; if the figure comes from a prior Book Update (source at Allocations just says "allocations in the system" etc.), use `Books last heard over` instead — NEVER flag `Books last heard` as wrong at Allocations when the source did not give a final books figure
 - Book-line at Priced: NO new line, NO `Book update:` prefix; appended to end of closing paragraph
   - Case A (final books received, JLM disclosed): `… Final books over EUR1.2bn (incl. EUR250m JLM).`
@@ -123,8 +130,8 @@
 - `currency` — matches source
 - `volume` — matches source (`bmk`, `300m`, `1bn`)
 - `structure` — matches source (9-char cap); sub-2yr use fractional years (`1.5y` not `18m`)
-- `priceEvolution` — matches current level; `a` suffix for area (pre-spread-set); no `a` once firm; ~14 char limit; a range format (e.g. `MS+145/150`) already implies area — NEVER add `a` suffix to a range; `a` suffix only required on single-point levels (e.g. `MS+105a`)
-- `bookOrRating` — HG: `JT-LEADS` if >3 BRs, bank name if ≤3; EM: ratings shorthand (M/S/F) — use EXPECTED ISSUE ratings (not obligor/guarantor ratings); when issue rating differs from obligor rating, the issue rating is correct — NEVER flag it as missing the obligor's rating. **Field has a 12-character limit (including `/` separators)** — when suggesting bank-name values for ≤3 BRs, use abbreviated names if needed (e.g. `HSBC/LYD/RBC` not `HSBC/Lloyds/RBC`). Never suggest a value that exceeds 12 characters.
+- `priceEvolution` — matches current level; `a` suffix for area (pre-spread-set); no `a` once firm; ~14 char limit; a range format (e.g. `MS+145/150`) already implies area — NEVER add `a` suffix to a range; `a` suffix only required on single-point levels (e.g. `MS+105a`); **SONIA Daily Margin (DM) — use `SONIA+` prefix (e.g. `SONIA+100a`), NEVER `SDM` — SDM causes confusion and is not used**
+- `bookOrRating` — HG: `JT-LEADS` if >3 BRs; for exactly 3 BRs, **DO NOT FLAG — `JT-LEADS` is always acceptable at 3 banks (names sometimes won't fit); 3-bank deals are a no-flag zone regardless of what is present**; for ≤2 BRs, **must use bank names** (e.g. `NWG/DB` for Natwest + Deutsche). EM: ratings shorthand (M/S/F) — use EXPECTED ISSUE ratings (not obligor/guarantor ratings); when issue rating differs from obligor rating, the issue rating is correct — NEVER flag it as missing the obligor's rating. **EM ratings format: if ALL three agencies unrated, use `NR/NR/NR` — NEVER `///`; if at least one rating exists, `/` is acceptable as placeholder for missing agencies (e.g. `A//`, `A/BBB/`). This ratings format applies to EM tranches only — HG `bookOrRating` always uses bookrunner names/JT-LEADS, never ratings.** **Field has a 12-character limit (including `/` separators)** — when suggesting bank-name values, use abbreviated names if needed (e.g. `HSBC/LYD/RBC` not `HSBC/Lloyds/RBC`). Never suggest a value that exceeds 12 characters.
 - `timing` — matches source; Mandate format: `i/c DD Mon>` (calls) or `i/m DD Mon>` (meetings); `>` for series; dash for ranges; launch phrase beats call dates; if source gives no specific date ("in the near future", "subject to market conditions"), vague timing is acceptable — don't flag format; NEVER flag `this week` when source says "in the near future" or "near future, subject to market conditions" — `this week` is the correct BR encoding for that phrasing; if near end of week, `w/c DD Mon` with the following Monday's date (e.g. `w/c 20 Sep`) is also acceptable
 - When source explicitly states a pricing day (e.g. "pricing Friday", "pricing today"), timing = that day name (e.g. `Friday`) — this overrides any investor call date; NEVER flag a pricing-day timing as wrong because a call date also exists in the source
 - **`timing` — `today` stays `today`; future days use the day name** — `today` is correct when source says "today's business" or "expected to price today"; NEVER flag `today` as stale or convert it to a day name. When source says "expect tomorrow's business" or names a specific future day in the current week, use the actual day name (e.g. `Tuesday`), not the word `tomorrow`. Kroger 14690240 (2026-09-28): source "Expected to price today" → `today` is correct, not `Monday`.
@@ -165,7 +172,7 @@
 - Boolean correlations: `covered`↔Covered Bond, `green`↔Green, `sustainable`↔Sustainable, `sustainabilityLinked`↔SLB, `social`↔Social, `seniorPreferred`↔SP, `seniorNonPreferred`↔SNP, `coc`↔CoC, `mwc`↔MWC, `cuc`↔CUC, `subordinated`↔Sub, `tier`↔AT1/T2
 - Blue Bond tranche: `green=true` MUST be set in the priced-deal form (blue bonds fall under the green classification); `additionalInfo` should also note "Blue Bond"
 - opCo/holdCo whitelist ONLY: UK/Swiss/US/JP banks + ING + Nationwide + Softbank; false for all others incl Korean, EM, covered bonds, corporates, SSA
-- Taps: add onto original priced record via `Increase nominal`; `nominalSecond` = original + increase; tap ISIN = original bond ISIN
+- Taps: **`Bond increase` checkbox in the tranche must be ticked from IPTs onwards and remain ticked throughout the deal — flag if not ticked at any stage**; also add onto original priced record via `Increase nominal`; `nominalSecond` = original + increase; tap ISIN = original bond ISIN
 - Bank counts: `dealBanks.active` = source active-JLM count; Co-managers excluded
 - Re-fetch priced record immediately before posting flag (live edits by desk)
 - statsCategories: GEOGRAPHY + INVESTOR must each sum to 100.0 (0.1 rounding OK)
@@ -185,6 +192,7 @@
 Strip source tenor prefixes (`3mS+`, `6mE+`, `3mL+`). Primary spread only (Gilts for GBP, Treasuries for USD); never post-reset margin.
 
 ## BOOK-LINE RULES (summary)
+- **`Book update:` is ALWAYS on its own new line** at every stage except Priced — flag any `Book update:` that is inline/appended to a body paragraph at non-Priced stages
 - Allocations: own line, `Book update:` prefix required; `Final books over <X>.` when source gives final books at Allocations; `Books last heard over <X>.` when figure carries from a prior update (source didn't restate it)
 - Priced Case A (JLM disclosed): appended to closing paragraph: `Final books over <X> (incl. <Y> JLM).`
 - Priced Case A (no JLM figure — source omits JLM amount or says `excl. JLM` without a figure): NO book line in body at all; `finalBooks` field in priced-deal form only — never suggest appending `(excl. JLM)` to body
