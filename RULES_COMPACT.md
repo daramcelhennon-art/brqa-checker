@@ -62,7 +62,7 @@
 - BOCOM / Bank of Communications / BOCOM International = same BR bank ID; source may list "Bank of Communications" and "BOCOM International" as separate entries — count as 1, don't flag the gap
 - `WFS` and `WFC` are both acceptable abbreviations for Wells Fargo Securities — NEVER flag either as wrong; treat as interchangeable
 - priceEvolution one-digit truncation when full value exceeds ~14 char field limit — by design
-- Tranche `volume` field character limit — if the source size (e.g. CNY2.024bn) doesn't fit and the associate has entered a rounded value (e.g. 2.02bn), do NOT flag the rounding as a mismatch. Never suggest a value that doesn't fit in the field.
+- Tranche `volume` field character limit — if the source size (e.g. CNY2.024bn, USD1.458bn) doesn't fit and the associate has entered a rounded/truncated value (e.g. 2.02bn, 1.45bn), do NOT flag the rounding as a mismatch. **NEVER suggest a fix value that itself doesn't fit in the field** — always verify the suggested value fits before flagging; if `1.45bn` is stored and `1.458bn` doesn't fit, `1.45bn` is correct.
 - 1-year par call NOT in additionalInfo — only sub-year atypical windows (2mo/3mo/6mo)
 - 0.1% rounding in statsCategories to reach 100.0 — not a defect
 

@@ -8382,5 +8382,11 @@
   "1791270371.612349": {
     "checked_at": "2026-10-06T07:06:11Z",
     "verdict": "flagged"
+  },
+  "1791297249.705259": {
+    "verdict": "clean",
+    "deal_id": 14700476,
+    "reply_ts": "1791297783.034299",
+    "note": "false positive - 1.45bn is correct truncation, 1.458bn does not fit field"
   }
 }
