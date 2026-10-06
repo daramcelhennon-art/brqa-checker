@@ -8050,5 +8050,15 @@
   "1790845207.878629": {
     "checked_at": "2026-10-01T00:00:00Z",
     "verdict": "skipped"
+  },
+  "1790866093.006859": {
+    "checked_at": "2026-10-01T15:50:00Z",
+    "verdict": "flagged"
+  },
+  "1791270371.612349": {
+    "verdict": "clean",
+    "deal_id": 14700439,
+    "reply_ts": "1791270763.716639",
+    "note": "false positive - Aaa//AAA is correct Moody/SP-blank/Fitch order"
   }
 }

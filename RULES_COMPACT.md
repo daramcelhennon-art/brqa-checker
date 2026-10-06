@@ -115,7 +115,8 @@
 - Mandate body Mode A: source gave prose paragraph → quote verbatim in `"..."`
 - Mandate body Mode B: source gave term-sheet bullets → paraphrase into `<Issuer> is planning a …`
 - **Roadshow Update / Timing Update body format** — two parts: (1) update content as a **prose paragraph** (source bullets joined with `. `, no bullet formatting); (2) `Original mandate is as follows:` on a new line; (3) the full original mandate body in quotes below. Flag if: bullets not joined to prose, `Original mandate is as follows:` line missing, or original mandate body absent.
-- Both modes require: mandate verb + banks + role, ratings (both issuer + expected issue when different), UOP, logistics coordinator
+- Both modes require: mandate verb + banks + role, ratings (both issuer + expected issue when different), UOP, logistics coordinator, rep/contact name (e.g. `Max Querling (Head of Financial Planning & Analysis)`) — flag if missing
+- €€€/★★★ header line in mandate body — optional; NEVER flag its absence or corruption; body may start directly with issuer name/description
 - `may follow, subject to market conditions` — preferred but NEVER required; NEVER flag its absence from the mandate body
 - **`Book update:` is ONLY for genuine investor demand figures** (e.g. `Book update: Books over EUR1.2bn. Books open, today's business.`) — must be on its own new line; timing goes AFTER the figure on the same `Book update:` line. `Book update:` is WRONG if the line contains only: deal/bond sizing ("Size set at CHF115m"), timing only, or "Books open" with no demand figure — these go inline at the end of the body paragraph with no `Book update:` prefix. The ONLY exception for genuine demand figures is Priced stage where the book figure is appended inline to the closing paragraph with no prefix.
 - Book-line at Allocations: own line with `Book update:` prefix; use `Final books over` ONLY if the Allocations out source explicitly states the final books figure; if the figure comes from a prior Book Update (source at Allocations just says "allocations in the system" etc.), use `Books last heard over` instead — NEVER flag `Books last heard` as wrong at Allocations when the source did not give a final books figure
@@ -156,6 +157,7 @@
 ## PRICED-DEAL FORM RULES
 - ALWAYS use deal's actual `_category` (em/hg) for priced API calls — never default to hg
 - Field names: `moodysRating`/`snpRating`/`fitchRating` (NOT `moodys`/`snp`/`fitch`)
+- **Ratings order is always Moody's / S&P / Fitch** — `Aaa//AAA` = Moody's Aaa, S&P blank, Fitch AAA; this IS correct; NEVER flag `X//Z` as wrong order or suggest `/X/Z`
 - Moody's stored ALL-CAPS: `BAA3` = `Baa3`; normalise before comparing
 - S&P underscore: `BBB_PLUS` = `BBB+`, `A_MINUS` = `A-`
 - Cross-over: ANY IG rating → treat as IG
