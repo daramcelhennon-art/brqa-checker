@@ -287,32 +287,40 @@ def process_message(br: BondRadar, msg: dict, delta_path: str) -> str:
 
 
 def main() -> int:
+    import traceback
     shard_path = os.environ.get("SHARD_FILE", "shard_0.json")
     delta_path = os.environ.get("STATE_DELTA_FILE", "state_delta_0.json")
 
-    if not Path(shard_path).exists():
+    try:
+        if not Path(shard_path).exists():
+            print("PRE_CHECK=needs_ai")
+            return 0
+
+        msgs = json.loads(Path(shard_path).read_text())
+        if not msgs:
+            print("PRE_CHECK=skipped_empty")
+            return 0
+
+        br = BondRadar()
+        verdicts = []
+        for msg in msgs:
+            v = process_message(br, msg, delta_path)
+            verdicts.append(v)
+            print(f"  verdict: {v}")
+
+        # If every message was handled (skipped or flagged mechanically) → no Claude needed
+        if all(v in ("skipped", "flagged") for v in verdicts):
+            print("PRE_CHECK=done")
+            return 0
+
         print("PRE_CHECK=needs_ai")
         return 0
 
-    msgs = json.loads(Path(shard_path).read_text())
-    if not msgs:
-        print("PRE_CHECK=skipped_empty")
+    except Exception:
+        print("PRE_CHECK_ERROR: pre_check.py crashed — falling through to Claude", flush=True)
+        traceback.print_exc()
+        print("PRE_CHECK=needs_ai")
         return 0
-
-    br = BondRadar()
-    verdicts = []
-    for msg in msgs:
-        v = process_message(br, msg, delta_path)
-        verdicts.append(v)
-        print(f"  verdict: {v}")
-
-    # If every message was handled (skipped or flagged mechanically) → no Claude needed
-    if all(v in ("skipped", "flagged") for v in verdicts):
-        print("PRE_CHECK=done")
-        return 0
-
-    print("PRE_CHECK=needs_ai")
-    return 0
 
 
 if __name__ == "__main__":
