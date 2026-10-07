@@ -28,6 +28,7 @@
 - `priceEvolution` at Launched may stay at guidance level — don't flag pe=guidance vs body=launched-spread
 - SOFR equiv + timing="DROPPED" on dropped FRN tranche — valid format
 - `**` prefix missing on previous-day deals — BR removes at end of pricing day
+- Slash placeholders in body rating text (e.g. `/BBB/ (S&P)`, `Baa3//` ) — NEVER flag; slashes show M/S/F position and single-agency ratings may retain them in body text
 - Multi-tranche headline missing per-tranche tenors — `dual-tranche` marker sufficient
 - SSN / Senior Secured is NOT a headline format flag
 - 144A/RegS is NOT a headline format flag — never add to headline
