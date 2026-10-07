@@ -99,7 +99,7 @@ jobs:
 
       - name: Run 4 parallel shards
         env:
-          CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
           BR_USERNAME: ${{ secrets.BR_USERNAME }}
           BR_PASSWORD: ${{ secrets.BR_PASSWORD }}
