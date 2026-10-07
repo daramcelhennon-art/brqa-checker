@@ -8536,5 +8536,9 @@
     "deal_id": 14700646,
     "reply_ts": "1791359877.857599",
     "note": "false positive - /BBB/ slash placeholders in body text are valid"
+  },
+  "1791355356.383909": {
+    "checked_at": "2026-10-07T00:00:00Z",
+    "verdict": "skipped"
   }
 }
