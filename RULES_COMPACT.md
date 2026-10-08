@@ -121,7 +121,11 @@
 - €€€/★★★ header line in mandate body — optional; NEVER flag its absence or corruption; body may start directly with issuer name/description
 - `may follow, subject to market conditions` — preferred but NEVER required; NEVER flag its absence from the mandate body
 - **`Book update:` is ONLY for genuine investor demand figures** (e.g. `Book update: Books over EUR1.2bn. Books open, today's business.`) — must be on its own new line; timing goes AFTER the figure on the same `Book update:` line. `Book update:` is WRONG if the line contains only: deal/bond sizing ("Size set at CHF115m"), timing only, or "Books open" with no demand figure — these go inline at the end of the body paragraph with no `Book update:` prefix. The ONLY exception for genuine demand figures is Priced stage where the book figure is appended inline to the closing paragraph with no prefix.
-- Book-line at Allocations: own line with `Book update:` prefix; use `Final books over` ONLY if the Allocations out source explicitly states the final books figure; if the figure comes from a prior Book Update (source at Allocations just says "allocations in the system" etc.), use `Books last heard over` instead — NEVER flag `Books last heard` as wrong at Allocations when the source did not give a final books figure
+- Book-line at Allocations: own line with `Book update:` prefix; three cases for wording:
+  1. **Allocations source explicitly gives a (new) final books figure** → `Final books over X` (most authoritative; figure may differ from books-closed)
+  2. **Allocations source is SILENT AND prior stage said "books closed / orderbooks closed" with figure X** → `Final books over X` is valid — treat the books-closed figure as final. Do NOT flag `Final books` just because the Allocations source is silent (IDA EUR1bn 14700694: Launched said "Orderbooks closed over EUR1.2bn" → `Final books over EUR1.2bn` at Allocations = CORRECT)
+  3. **Allocations source is SILENT AND prior stage only had a mid-book figure (no "books closed" language)** → `Books last heard over X` — do NOT use `Final books` here
+  - NEVER flag `Final books` wording at Allocations just because the Allocations source didn't restate the figure — check whether the prior stage's body used "books closed / orderbooks closed" language
 - Book-line at Priced: NO new line, NO `Book update:` prefix; appended to end of closing paragraph
   - Case A (final books received, JLM disclosed): `… Final books over EUR1.2bn (incl. EUR250m JLM).`
   - Case A (no JLM disclosed): NO book line in body; `finalBooks` field only
