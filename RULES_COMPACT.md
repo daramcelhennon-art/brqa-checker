@@ -68,7 +68,7 @@
 - 0.1% rounding in statsCategories to reach 100.0 — not a defect
 
 ## HEADLINE RULES
-- Must start with `**` prefix (same-day deals only)
+- Must start with `**` prefix (same-day deals only) — **ALWAYS flag if `**` is missing and the deal's pricing date is today**; BR removes `**` at end of pricing day so NEVER flag on prior-day deals
 - Elements: `** <Issuer> <CCY><Size> [qualifier] <Tenor/Structure> [format flags]: <Stage> <level>` — level comes AFTER the stage word for ALL stages EXCEPT Final Terms, Allocations out, and Book Update
 - **`bmk` / `benchmark` in the headline MUST be replaced with the actual size once the deal has sized.** `bmk` is only acceptable at IPTs / Guidance / Book Update when the size is not yet set. At Launched, Final Terms, Priced, and Allocations: if source shows a specific size (e.g. EUR500m), `bmk` in the headline is WRONG — flag it and give the specific size as the fix. Same rule applies to the tranche form `volume` field.
 - Level BEFORE colon for: `Final Terms`, `Allocations out`, `Book Update`, and `Size update` — e.g. `** EUR750m 6.5y at MS+78bp: Allocations out`; `** USD750m 5y at T+195bp: Final Terms`; `** BPCE EUR bmk 6NC5 SNP at MS+140bp area: Book update`; `** Republic of Finland CHF125m 10-year at SARON MS+23bp: Size update`
@@ -102,6 +102,7 @@
 - Opener format: `<Stage phrase> is <level> for <Borrower>'s <size> <structure> <ranking> <Notes/Bonds>, due <maturity>.`
 - Priced opener: `Priced: <size>, coupon <X>%, due <date>.`
 - Multi-tranche opens `Tranche A:` + `Tranche B:` + `Common terms:` — never `Launched:` opener
+- **Multi-tranche body must go DIRECTLY to `Tranche A:` — NO introductory overview paragraph before the tranche breakdown.** If the body opens with a summary sentence (e.g. "IPTs are X area for the [tenor] and Y area for the [tenor]...") before `Tranche A:`, flag it. The per-tranche levels belong inside each `Tranche A:` / `Tranche B:` block, not in a preamble.
 - Allocations out body opener — there is NO required prefix; NEVER flag body opener at Allocations / Allocations out stage; the body is free-form (e.g. "Allocations out now. Size set at…" with no stage-prefix rule)
 - Check `Common terms:` count == 1 on multi-tranche (duplicated = defect)
 - Body strips accents/diacritics — flag if accents remain (except at Mandated stage)
