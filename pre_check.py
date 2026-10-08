@@ -302,7 +302,7 @@ def process_message(br: BondRadar, msg: dict, delta_path: str) -> str:
         f"{mention}:warning: BR QA — id `{deal_id}` at {stage.replace('_',' ').title()} "
         f"— {len(flags)} field issue{'s' if len(flags) > 1 else ''}\n"
         f"Fix:\n{bullets}\n"
-        f"_(automated · BR QA Checker)_"
+        f"_(automated · BR QA Checker · pre-check)_"
     )
 
     _post(CHANNEL, ts, post_text)
@@ -334,8 +334,14 @@ def main() -> int:
             verdicts.append(v)
             print(f"  verdict: {v}")
 
-        # If every message was handled (skipped or flagged mechanically) → no Claude needed
-        if all(v in ("skipped", "flagged") for v in verdicts):
+        # A mechanical flag only covers a handful of specific fields - it is
+        # NOT a substitute for the AI pass's full six-check walk (headline,
+        # body, other tranche/priced fields, house style, duplicates, etc).
+        # Only a pure non-deal ("skipped") message can skip Claude entirely;
+        # "flagged" must still proceed to needs_ai so the rest still gets
+        # checked (the mechanical post and the AI pass's post coexist in the
+        # thread - see slack_post.py's exclude_marker).
+        if all(v == "skipped" for v in verdicts):
             print("PRE_CHECK=done")
             return 0
 

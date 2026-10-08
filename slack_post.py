@@ -68,16 +68,25 @@ def _bot_identity() -> dict:
     return _BOT_IDENTITY
 
 
-def bot_already_in_thread(channel: str, thread_ts: str) -> bool:
-    """True iff this bot has any reply in the thread already."""
+def bot_already_in_thread(channel: str, thread_ts: str, exclude_marker: str | None = None) -> bool:
+    """True iff this bot has any reply in the thread already.
+
+    `exclude_marker`, if given, is a substring that disqualifies a reply from
+    counting - used so a mechanical pre_check.py flag (tagged with its own
+    marker) doesn't block a later, separate Claude AI-pass post in the same
+    thread. Each layer should only guard against duplicating ITSELF.
+    """
     ident = _bot_identity()
     replies = _get("conversations.replies",
                    {"channel": channel, "ts": thread_ts, "limit": 200}).get("messages") or []
     for m in replies[1:]:  # skip the parent message
-        if m.get("bot_id") and m.get("bot_id") == ident["bot_id"]:
-            return True
-        if m.get("user") and m.get("user") == ident["user_id"]:
-            return True
+        is_this_bot = (m.get("bot_id") and m.get("bot_id") == ident["bot_id"]) or \
+                      (m.get("user") and m.get("user") == ident["user_id"])
+        if not is_this_bot:
+            continue
+        if exclude_marker and exclude_marker in (m.get("text") or ""):
+            continue
+        return True
     return False
 
 
@@ -119,7 +128,11 @@ def _cli(argv: list[str]) -> int:
     # state.json push can fail intermittently (concurrent runs, transient
     # push errors) which lets stale state re-QA the same message on a later
     # tick. The thread itself is the source of truth for "already posted".
-    if bot_already_in_thread(channel, thread_ts):
+    #
+    # Excludes pre_check.py's mechanical-flag posts (tagged "· pre-check)")
+    # from counting here - a mechanical flag firing doesn't mean the AI pass
+    # has run yet, so it must not block this (the AI pass's own) post.
+    if bot_already_in_thread(channel, thread_ts, exclude_marker="· pre-check)"):
         print(json.dumps({
             "skipped": True,
             "reason": "bot_already_in_thread",

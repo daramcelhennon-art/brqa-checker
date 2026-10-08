@@ -16,6 +16,8 @@ Env vars loaded: BR_USERNAME, BR_PASSWORD, SLACK_BOT_TOKEN, SHARD_FILE, STATE_DE
 3. Post finding via slack_post.py. React on original: clean → `double-tick`, flagged → `exclamation`, skipped → no react.
 4. Write each result to $STATE_DELTA_FILE as `{ts: {checked_at, verdict}}`. Never touch state.json directly.
 
+Note: a message may already have a mechanical pre-check flag posted in its thread (tagged `· pre-check)` - e.g. a missing FIGI). That's a separate, narrower pass - it does NOT mean this message has already been fully QA'd. Always run your own complete six-check walk regardless, and post your own separate finding as normal (slack_post.py won't block you on the pre-check's post specifically). You don't need to re-flag the exact same mechanically-covered field again if you also happen to notice it - just don't skip checking everything else because a pre-check flag already exists.
+
 ## Output format — Slack posts MUST be SHORT
 
 CLEAN (no @-mention):
