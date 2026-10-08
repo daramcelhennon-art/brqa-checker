@@ -154,7 +154,7 @@
 - `hgDetails.highYield` correct; if true, `hyExpectedPageId` populated (`HYRE##`)
 - `hgDetails.coveredBonds` = true iff covered bond
 - `emDetails.regionLatam`/`regionCeemea`/`regionAsia`/`feedEmrd` — correct for EM
-- `expectedPageId` populated pre-priced; clears on Priced (don't flag null on Priced)
+- `expectedPageId` populated pre-priced; clears on Priced (don't flag null on Priced). Pure-HY deals (`highYield:true`, not dual-feed) don't feed this pipeline — don't flag null, only `hyExpectedPageId` applies
 - `expectedPageCount` = min(len(tranches), 5) — pre-priced only
 - `hyExpectedPageId` — pre-priced only; clears on Priced (don't flag null on Priced — same rule as expectedPageId)
 - `pricedDeals[]` empty at Allocations Out — NOT a flag (body-update stage only)
@@ -168,6 +168,8 @@
 - S&P underscore: `BBB_PLUS` = `BBB+`, `A_MINUS` = `A-`
 - Cross-over: ANY IG rating → treat as IG
 - `isin`, `figi`, `bloombergCode` — all three MUST be populated; null = flag
+- `tranches[i].figi` null — flag from the deal's first stage (Mandate/IPTs/Guidance, whichever first) onward, every pre-priced stage, not just once priced; stops once `type: PRICED` (priced-deal `figi` rule takes over)
+- `figi` null (priced-deal OR pre-priced `tranches[i].figi`) — ALSO tag `<@U09GENPJNQ5>` (Bloomberg IG Europe) + `<@U09GGGDB286>` (Bloomberg EM) on the flag, not just a plain flag
 - `cusip` — NOT on priced form; never flag
 - Dual-ISIN: only one stored (usually RegS `XS…`); don't flag other missing
 - Format flags: EXACTLY ONE true of `dealRegsOnly`/`deal144aOnly`/`deal144aRegs`/`secRegistered`/`hg3a2`/`hgSecExempt`

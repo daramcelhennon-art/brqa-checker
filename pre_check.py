@@ -34,6 +34,11 @@ from slack_react import add_reaction
 
 CHANNEL = "C09JX51GAKH"
 
+# Tagged on a missing tranche-level FIGI so the Bloomberg feed accounts can
+# action it directly, rather than the flag just sitting for a human to notice.
+BLOOMBERG_IG_EUROPE_USER_ID = "U09GENPJNQ5"
+BLOOMBERG_EM_USER_ID = "U09GGGDB286"
+
 # ── non-deal keyword filter ────────────────────────────────────────────────
 NON_DEAL_PATTERNS = re.compile(
     r"\b(tender offer|exchange offer|consent solicitation|liability management"
@@ -122,15 +127,29 @@ def _stats_sum_ok(cats: list[dict], category_type: str) -> tuple[bool, float]:
     return abs(total - 100.0) <= 0.15, total
 
 
-def check_deal(br: BondRadar, cat: str, deal: dict, source_text: str) -> list[str]:
-    """Run all mechanical checks. Returns list of flag strings."""
+def check_deal(br: BondRadar, cat: str, deal: dict, source_text: str) -> tuple[list[str], bool]:
+    """Run all mechanical checks. Returns (flag strings, tag_bloomberg)."""
     flags: list[str] = []
+    tag_bloomberg = False
     deal_id = deal["id"]
     headline = deal.get("headline") or ""
     body = deal.get("message") or ""
     stage = _stage_from_headline(headline)
     hg = deal.get("hgDetails") or {}
     em = deal.get("emDetails") or {}
+
+    # 0. Tranche-level FIGI must be populated from the start - any pre-priced
+    # stage (Mandate onward), not just once the tranche is actually priced.
+    # Separate from the figi on the priced-deal record itself (checked below
+    # once pricing happens - they must match per checklist.md). Missing it
+    # blocks Bloomberg's own downstream linking, so tag the Bloomberg feed
+    # accounts directly rather than just flagging it.
+    if stage != "priced":
+        for i, tranche in enumerate(deal.get("tranches") or []):
+            if not tranche.get("figi"):
+                label = f"Tranche {chr(65 + i)}" if len(deal.get("tranches") or []) > 1 else "Tranche"
+                flags.append(f"`tranches[{i}].figi` — null → {label} has no FIGI (required from Mandate onward, not just once priced)")
+                tag_bloomberg = True
 
     # 1. highYield requires hyExpectedPageId (pre-priced only)
     if hg.get("highYield") and stage != "priced":
@@ -171,6 +190,8 @@ def check_deal(br: BondRadar, cat: str, deal: dict, source_text: str) -> list[st
                     pass
             for field in missing_fields:
                 flags.append(f"`{field}` — null → must be populated on priced record")
+                if field == "figi":
+                    tag_bloomberg = True
 
             # 5b. Exactly one format flag true
             true_flags = [f for f in FORMAT_FLAG_FIELDS if pd.get(f)]
@@ -189,7 +210,7 @@ def check_deal(br: BondRadar, cat: str, deal: dict, source_text: str) -> list[st
                             f"`statsCategories` {cat_type} sums to {total:.1f} — must be 100.0"
                         )
 
-    return flags
+    return flags, tag_bloomberg
 
 
 def process_message(br: BondRadar, msg: dict, delta_path: str) -> str:
@@ -256,7 +277,7 @@ def process_message(br: BondRadar, msg: dict, delta_path: str) -> str:
     print(f"  {ts}: matched deal {deal_id} ({headline[:60]}) stage={stage}")
 
     # ── 3. Mechanical checks ───────────────────────────────────────────────
-    flags = check_deal(br, cat, deal, text)
+    flags, tag_bloomberg = check_deal(br, cat, deal, text)
 
     if not flags:
         print(f"  {ts}: mechanical checks clean — deferring to Claude for content")
@@ -270,7 +291,12 @@ def process_message(br: BondRadar, msg: dict, delta_path: str) -> str:
             reactor_id = r["users"][0]
             break
 
-    mention = f"<@{reactor_id}>\n" if reactor_id else ""
+    mention_lines = []
+    if reactor_id:
+        mention_lines.append(f"<@{reactor_id}>")
+    if tag_bloomberg:
+        mention_lines.append(f"<@{BLOOMBERG_IG_EUROPE_USER_ID}> <@{BLOOMBERG_EM_USER_ID}>")
+    mention = ("\n".join(mention_lines) + "\n") if mention_lines else ""
     bullets = "\n".join(f"• {f}" for f in flags)
     post_text = (
         f"{mention}:warning: BR QA — id `{deal_id}` at {stage.replace('_',' ').title()} "
