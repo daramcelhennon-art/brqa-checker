@@ -27,7 +27,6 @@
 - Tranche form `timing: "launched"` at Allocations Out — correct carry-forward
 - `priceEvolution` at Launched may stay at guidance level — don't flag pe=guidance vs body=launched-spread
 - SOFR equiv + timing="DROPPED" on dropped FRN tranche — valid format
-- `**` prefix missing on previous-day deals — BR removes at end of pricing day
 - Slash placeholders in body rating text (e.g. `/BBB/ (S&P)`, `Baa3//` ) — NEVER flag; slashes show M/S/F position and single-agency ratings may retain them in body text
 - Multi-tranche headline missing per-tranche tenors — `dual-tranche` marker sufficient
 - SSN / Senior Secured is NOT a headline format flag
@@ -68,7 +67,7 @@
 - 0.1% rounding in statsCategories to reach 100.0 — not a defect
 
 ## HEADLINE RULES
-- Must start with `**` prefix (same-day deals only) — **ALWAYS flag if `**` is missing and the deal's pricing date is today**; BR removes `**` at end of pricing day so NEVER flag on prior-day deals
+- Must start with `**` prefix on EVERY update, no exceptions — not stage-based, not day-based. **ALWAYS flag if `**` is missing**, regardless of whether the deal is pre-priced or Priced, and regardless of which calendar day the update lands on.
 - Elements: `** <Issuer> <CCY><Size> [qualifier] <Tenor/Structure> [format flags]: <Stage> <level>` — level comes AFTER the stage word for ALL stages EXCEPT Final Terms, Allocations out, and Book Update
 - **`bmk` / `benchmark` in the headline MUST be replaced with the actual size once the deal has sized.** `bmk` is only acceptable at IPTs / Guidance / Book Update when the size is not yet set. At Launched, Final Terms, Priced, and Allocations: if source shows a specific size (e.g. EUR500m), `bmk` in the headline is WRONG — flag it and give the specific size as the fix. Same rule applies to the tranche form `volume` field.
 - Level BEFORE colon for: `Final Terms`, `Allocations out`, `Book Update`, and `Size update` — e.g. `** EUR750m 6.5y at MS+78bp: Allocations out`; `** USD750m 5y at T+195bp: Final Terms`; `** BPCE EUR bmk 6NC5 SNP at MS+140bp area: Book update`; `** Republic of Finland CHF125m 10-year at SARON MS+23bp: Size update`
