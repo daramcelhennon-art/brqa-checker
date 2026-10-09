@@ -265,9 +265,9 @@ The full priced-deal record has these fields (all should be populated post-prici
 
 ### Pricing outputs
 
-- **`fpr`** — Final Priced Reoffer as a number, e.g. `99.144` / `100.0`. `100.0` for par-priced FRNs and FRN-format deals; must match the outgoing body's `Reoffer` value.
-- **`spread`** — reoffer spread string, e.g. `"ASW+180"` / `"T+22.1"` / `"SARON+85"` / `"SOFR+40"`. Must match the outgoing body's `spread`.
-- **`yield`** — yield string with `%`, e.g. `"6.980%"`. FRNs may leave this blank or populated with the reference rate.
+- **`fpr`** — Final Priced Reoffer as a number, e.g. `99.144` / `100.0`. `100.0` for par-priced FRNs and FRN-format deals; must match the outgoing body's `Reoffer` value **AND the source term sheet's reoffer price for that specific tranche** - a value that's merely non-null/populated is not enough, it must be numerically correct. On a multi-tranche deal, check every tranche's `fpr` against that SAME tranche's source line independently - don't assume later tranches are right just because the first one checked out.
+- **`spread`** — reoffer spread string, e.g. `"ASW+180"` / `"T+22.1"` / `"SARON+85"` / `"SOFR+40"`. Must match the outgoing body's `spread` AND the source's benchmark spread for that tranche - check correctness, not just presence.
+- **`yield`** — yield string with `%`, e.g. `"6.980%"`. FRNs may leave this blank or populated with the reference rate. When populated, must match the source's yield/YTM for that tranche.
 - **`oldSpread`** — previous spread value (from Guidance stage); typically populated automatically.
 - **`fxRate`** — FX rate at pricing (required; e.g. `0.70738` for AUD/USD). Must be populated for non-USD deals.
 - **`hgDetails.hgNip`** / **`emDetails.emPremiumNip`** — new issue premium (bps); optional.
