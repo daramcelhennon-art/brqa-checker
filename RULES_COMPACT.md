@@ -160,18 +160,19 @@
 - EM deals: skip regionAmericas check and pricedDeals[] empty check (HG-only)
 
 ## PRICED-DEAL FORM RULES
+- **GOVERNING PRINCIPLE: every field below must be checked for CORRECTNESS against the source term sheet, not just presence/non-null.** "Populated" and "correct" are different things — a field can be non-null and still wrong (e.g. `fpr: 100` when the source said `99.858`). Where a rule below only mentions flagging a null/missing value, that's shorthand for "obviously flag if missing" and does NOT mean skip checking the value when it IS populated. Check every tranche's own priced-deal record against that SAME tranche's source line independently — do not stop checking once one tranche or one field looks right.
 - ALWAYS use deal's actual `_category` (em/hg) for priced API calls — never default to hg
 - Field names: `moodysRating`/`snpRating`/`fitchRating` (NOT `moodys`/`snp`/`fitch`)
 - **Ratings order is always Moody's / S&P / Fitch** — `Aaa//AAA` = Moody's Aaa, S&P blank, Fitch AAA; this IS correct; NEVER flag `X//Z` as wrong order or suggest `/X/Z`
 - Moody's stored ALL-CAPS: `BAA3` = `Baa3`; normalise before comparing
 - S&P underscore: `BBB_PLUS` = `BBB+`, `A_MINUS` = `A-`
 - Cross-over: ANY IG rating → treat as IG
-- `isin`, `figi`, `bloombergCode` — all three MUST be populated; null = flag
+- `isin`, `figi`, `bloombergCode` — all three MUST be populated AND match the source's value for that exact tranche (ISIN/FIGI/ticker from the term sheet or bbg-lookup message) — null = flag, but so is a populated value that doesn't match the source
 - `tranches[i].figi` null — flag from the deal's first stage (Mandate/IPTs/Guidance, whichever first) onward, every pre-priced stage, not just once priced; stops once `type: PRICED` (priced-deal `figi` rule takes over)
 - `figi` null (priced-deal OR pre-priced `tranches[i].figi`) — ALSO tag `<@U09GENPJNQ5>` (Bloomberg IG Europe) + `<@U09GGGDB286>` (Bloomberg EM) on the flag, not just a plain flag
 - `cusip` — NOT on priced form; never flag
 - Dual-ISIN: only one stored (usually RegS `XS…`); don't flag other missing
-- Format flags: EXACTLY ONE true of `dealRegsOnly`/`deal144aOnly`/`deal144aRegs`/`secRegistered`/`hg3a2`/`hgSecExempt`
+- Format flags: EXACTLY ONE true of `dealRegsOnly`/`deal144aOnly`/`deal144aRegs`/`secRegistered`/`hg3a2`/`hgSecExempt` — AND it must be the ONE that matches the source's actual stated distribution (e.g. source says "144A/RegS" → `deal144aRegs`; "Reg S only" → `dealRegsOnly`); having exactly one true is not sufficient if it's the WRONG one
 - `finalBooks` — MUST match body; null when source gave book size = flag
 - `fpr` (reoffer price), `spread`, `yield` — **check BOTH presence AND correctness against the source, per tranche**: if source gives a reoffer price → `fpr` must be populated AND numerically match the source's reoffer price for THAT tranche (e.g. source says 99.858, `fpr: 100` is WRONG even though it's non-null — flag the wrong value, not just nulls); same for `spread` vs the source's benchmark spread and `yield` vs the source's yield/YTM. Do NOT flag these as missing if the source does not provide them (some deals have no benchmark spread; FRN deals often have no yield). On a multi-tranche deal, check this independently for EVERY tranche's own priced-deal record against that SAME tranche's source line — don't stop after the first tranche checks out.
 - `finalBooks` vs `additionalInfo Books last heard` — mutually exclusive
