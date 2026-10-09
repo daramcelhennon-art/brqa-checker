@@ -164,10 +164,14 @@
 - **`pre_check.py` now also mechanically loops EVERY priced record** (not just the first) for the isin/figi/bloombergCode/format-flag/statsCategories checks, and deterministically cross-checks `fpr` against the body's own "Reoffer X" mentions per tranche, by position. This is a safety net independent of your own thoroughness, but it only catches body-vs-form drift — if the body itself also has the wrong value (both wrong vs the real source), it won't be caught mechanically, so you must still independently verify every tranche's `fpr`/`spread`/`yield` against the actual source term sheet, not just trust the mechanical pass caught it.
 - ALWAYS use deal's actual `_category` (em/hg) for priced API calls — never default to hg
 - Field names: `moodysRating`/`snpRating`/`fitchRating` (NOT `moodys`/`snp`/`fitch`)
+- **Ratings (`moodysRating`, `snpRating`, `fitchRating`) — check BOTH presence AND correctness against source:** flag if a rating is null when the source gives it, AND flag if a stored rating doesn't match what the source states for that tranche (e.g. source says `Baa1`, form has `Baa3` — flag the mismatch). Use the EXPECTED ISSUE rating, not the obligor/guarantor rating.
 - **Ratings order is always Moody's / S&P / Fitch** — `Aaa//AAA` = Moody's Aaa, S&P blank, Fitch AAA; this IS correct; NEVER flag `X//Z` as wrong order or suggest `/X/Z`
 - Moody's stored ALL-CAPS: `BAA3` = `Baa3`; normalise before comparing
 - S&P underscore: `BBB_PLUS` = `BBB+`, `A_MINUS` = `A-`
 - Cross-over: ANY IG rating → treat as IG
+- **`settlementDate` — check BOTH presence AND correctness:** must match the source's stated settlement date for that tranche exactly. A wrong settlement date (e.g. T+5 stored when source says T+6) is a defect even if non-null. Format is ISO date (YYYY-MM-DD).
+- **`maturityDate` — check BOTH presence AND correctness:** must match the source's stated maturity date for that tranche. A date off by even one day is a defect. Derive from the source maturity (e.g. "due 16 October 2056" → `2056-10-16`).
+- **`couponRate` — check BOTH presence AND correctness:** must match the source's stated coupon % for that tranche. For FRN/floating-rate tranches this field may legitimately be absent; for fixed-rate tranches it must be populated and match the source coupon to two decimal places.
 - `isin`, `figi`, `bloombergCode` — all three MUST be populated AND match the source's value for that exact tranche (ISIN/FIGI/ticker from the term sheet or bbg-lookup message) — null = flag, but so is a populated value that doesn't match the source
 - `tranches[i].figi` null — flag from the deal's first stage (Mandate/IPTs/Guidance, whichever first) onward, every pre-priced stage, not just once priced; stops once `type: PRICED` (priced-deal `figi` rule takes over)
 - `figi` null (priced-deal OR pre-priced `tranches[i].figi`) — ALSO tag `<@U09GENPJNQ5>` (Bloomberg IG Europe) + `<@U09GGGDB286>` (Bloomberg EM) on the flag, not just a plain flag
