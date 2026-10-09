@@ -18,6 +18,8 @@ Env vars loaded: BR_USERNAME, BR_PASSWORD, SLACK_BOT_TOKEN, SHARD_FILE, STATE_DE
 
 Note: a message may already have a mechanical pre-check flag posted in its thread (tagged `· pre-check)` - e.g. a missing FIGI). That's a separate, narrower pass - it does NOT mean this message has already been fully QA'd. Always run your own complete six-check walk regardless, and post your own separate finding as normal (slack_post.py won't block you on the pre-check's post specifically). You don't need to re-flag the exact same mechanically-covered field again if you also happen to notice it - just don't skip checking everything else because a pre-check flag already exists.
 
+**Multi-tranche deals — do not stop once you find one issue.** A real miss: a ratings error was found on Tranche A of a 3-tranche deal, and Tranche C's wrong reoffer price was never checked because the walk effectively stopped being thorough once Tranche A's issue was found. Before concluding, explicitly check EVERY tranche's priced-deal record (fpr/spread/yield/isin/figi/bloombergCode/ratings/additionalInfo/tier/banks) against that SAME tranche's own source line - finding a problem on one tranche is not a reason to check the others less carefully. If it helps you stay thorough, work through tranches in a literal list (Tranche A: ..., Tranche B: ..., Tranche C: ...) before writing the final post, even though the post itself stays short per the output format below.
+
 ## Output format — Slack posts MUST be SHORT
 
 CLEAN (no @-mention):

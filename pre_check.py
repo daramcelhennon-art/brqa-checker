@@ -168,19 +168,31 @@ def check_deal(br: BondRadar, cat: str, deal: dict, source_text: str) -> tuple[l
         flags.append(f"Body contains accented characters — strip diacritics: {''.join(set(bad))[:30]}")
 
     # 5. Priced-form checks (only when stage == priced)
+    # Loop EVERY priced record, not just pricedDeals[0] - a multi-tranche
+    # deal has one priced record per tranche, and checking only the first
+    # silently blind-spots every other tranche. This was a real miss: a
+    # ratings issue got caught on Tranche A while Tranche B/C's own priced
+    # records (including a wrong fpr on C) were never mechanically checked.
     if stage == "priced" and deal.get("pricedDeals"):
-        priced_id = deal["pricedDeals"][0]["id"]
-        try:
-            pd = br.get_priced_deal(cat, priced_id)
-        except Exception as e:
-            print(f"  could not fetch priced deal {priced_id}: {e}", file=sys.stderr)
-            pd = None
+        # Reoffer prices mentioned in the body, in order of appearance -
+        # used below for a deterministic fpr cross-check per tranche.
+        body_reoffers = re.findall(r"[Rr]eoffer\s+(\d+(?:\.\d+)?)", body)
 
-        if pd:
+        for tranche_idx, priced_summary in enumerate(deal["pricedDeals"]):
+            priced_id = priced_summary["id"]
+            try:
+                pd = br.get_priced_deal(cat, priced_id)
+            except Exception as e:
+                print(f"  could not fetch priced deal {priced_id}: {e}", file=sys.stderr)
+                continue
+            if not pd:
+                continue
+
+            label = f"pricedDeals[{tranche_idx}]" if len(deal["pricedDeals"]) > 1 else "priced record"
+
             # 5a. isin / figi / bloombergCode must all be populated.
             # Re-fetch once before flagging — priced form may not yet be saved
             # if the associate is still entering codes when the bot runs.
-            # spread / yield / fpr are source-dependent — Claude checks those.
             missing_fields = [f for f in ("isin", "figi", "bloombergCode") if not pd.get(f)]
             if missing_fields:
                 try:
@@ -189,16 +201,18 @@ def check_deal(br: BondRadar, cat: str, deal: dict, source_text: str) -> tuple[l
                 except Exception:
                     pass
             for field in missing_fields:
-                flags.append(f"`{field}` — null → must be populated on priced record")
+                flags.append(f"`{label}.{field}` — null → must be populated on priced record")
                 if field == "figi":
                     tag_bloomberg = True
 
-            # 5b. Exactly one format flag true
+            # 5b. Exactly one format flag true (which ONE is correct is
+            # source-dependent - Claude's AI pass checks that; this only
+            # catches the structurally-impossible zero-true/multi-true case)
             true_flags = [f for f in FORMAT_FLAG_FIELDS if pd.get(f)]
             if len(true_flags) == 0:
-                flags.append(f"Format flags — none set; exactly one of {FORMAT_FLAG_FIELDS} must be true")
+                flags.append(f"`{label}` Format flags — none set; exactly one of {FORMAT_FLAG_FIELDS} must be true")
             elif len(true_flags) > 1:
-                flags.append(f"Format flags — multiple set ({true_flags}); exactly one must be true")
+                flags.append(f"`{label}` Format flags — multiple set ({true_flags}); exactly one must be true")
 
             # 5c. statsCategories each sum to 100.0 (±0.15)
             cats_data = pd.get("statsCategories") or []
@@ -207,8 +221,26 @@ def check_deal(br: BondRadar, cat: str, deal: dict, source_text: str) -> tuple[l
                     ok, total = _stats_sum_ok(cats_data, cat_type)
                     if not ok:
                         flags.append(
-                            f"`statsCategories` {cat_type} sums to {total:.1f} — must be 100.0"
+                            f"`{label}.statsCategories` {cat_type} sums to {total:.1f} — must be 100.0"
                         )
+
+            # 5d. fpr vs the body's own stated "Reoffer X" for this tranche,
+            # by position - a deterministic safety net independent of the AI
+            # pass's thoroughness. Only fires when we can confidently pair
+            # one reoffer mention to one priced record (counts match); a
+            # mismatched count means the body format isn't what we expect,
+            # so skip rather than risk a wrong pairing / false positive.
+            if len(body_reoffers) == len(deal["pricedDeals"]) and tranche_idx < len(body_reoffers):
+                body_fpr = body_reoffers[tranche_idx]
+                form_fpr = pd.get("fpr")
+                if form_fpr is not None:
+                    try:
+                        if abs(float(body_fpr) - float(form_fpr)) > 0.001:
+                            flags.append(
+                                f"`{label}.fpr` — {form_fpr} → body says Reoffer {body_fpr} for this tranche, form doesn't match"
+                            )
+                    except (TypeError, ValueError):
+                        pass
 
     return flags, tag_bloomberg
 
