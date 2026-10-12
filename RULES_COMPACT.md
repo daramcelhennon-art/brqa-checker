@@ -134,6 +134,7 @@
 - `Final books over` vs `Final books above` — interchangeable; don't flag either wording
 
 ## TRANCHE FORM RULES
+- **`tranches[i].figi` — CRITICAL: flag null at EVERY stage from Mandate/IPTs/Guidance onwards, not just at Priced.** This requires fetching the full deal record via `news <cat> <id>` — the `search` summary does NOT include tranche FIGI. When flagging, ALSO tag `<@U09GENPJNQ5>` (Bloomberg IG Europe) AND `<@U09GGGDB286>` (Bloomberg EM) alongside the reactor. Missing FIGI at Guidance = flag, missing at IPTs = flag, missing at Mandate = flag. Never mark Clean without explicitly checking `tranches[i].figi` in the full news record.
 - `currency` — matches source
 - `volume` — matches source (`bmk`, `300m`, `1bn`)
 - `structure` — matches source (9-char cap); sub-2yr use fractional years (`1.5y` not `18m`)

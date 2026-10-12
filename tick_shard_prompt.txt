@@ -13,6 +13,8 @@ Env vars loaded: BR_USERNAME, BR_PASSWORD, SLACK_BOT_TOKEN, SHARD_FILE, STATE_DE
 ## Job
 1. Read $SHARD_FILE (JSON array of messages). Empty → print "shard empty" and exit.
 2. For each message: if it's a real bond deal post, run SIX checks per RULES_COMPACT.md (headline, body, tranche form, deal flags, priced-deal form, sweep). If tender/LM/non-deal → skip.
+
+**CRITICAL — always fetch the full news record:** `search <term>` returns a summary that does NOT include `tranches[i].figi` or other tranche-level fields. For every real deal, you MUST call `news <cat> <id>` to get the full record before checking tranche form fields. Never mark Clean without having called `news` and explicitly checked `tranches[i].figi` for each tranche.
 3. Post finding via slack_post.py. React on original: clean → `double-tick`, flagged → `exclamation`, skipped → no react.
 4. Write each result to $STATE_DELTA_FILE as `{ts: {checked_at, verdict}}`. Never touch state.json directly.
 
