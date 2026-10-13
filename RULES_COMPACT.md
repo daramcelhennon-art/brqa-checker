@@ -154,7 +154,7 @@
 - `hgDetails.highYield` correct; if true, `hyExpectedPageId` populated (`HYRE##`)
 - `hgDetails.coveredBonds` = true iff covered bond
 - `emDetails.regionLatam`/`regionCeemea`/`regionAsia`/`feedEmrd` — correct for EM
-- `expectedPageId` populated pre-priced; clears on Priced (don't flag null on Priced). Pure-HY deals (`highYield:true`, not dual-feed) don't feed this pipeline — don't flag null, only `hyExpectedPageId` applies
+- `expectedPageId` populated pre-priced; clears on Priced (don't flag null on Priced). **ANY `highYield:true` deal — whether pure-HY or dual-feed — NEVER flag `expectedPageId` null; only `hyExpectedPageId` applies.** `feedIgrd:true` on an HY deal does NOT mean `expectedPageId` is required — the HY page (`hyExpectedPageId`) is the correct and only page for HY deals. (Incident: 14710470 at Mandate — bot incorrectly flagged `expectedPageId` null on dual-feed HY deal with `hyExpectedPageId=HYRE7` already set.)
 - `expectedPageCount` = min(len(tranches), 5) — pre-priced only
 - `hyExpectedPageId` — pre-priced only; clears on Priced (don't flag null on Priced — same rule as expectedPageId)
 - `pricedDeals[]` empty at Allocations Out — NOT a flag (body-update stage only)
