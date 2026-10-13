@@ -15,7 +15,7 @@ Env vars loaded: BR_USERNAME, BR_PASSWORD, SLACK_BOT_TOKEN, SHARD_FILE, STATE_DE
 2. For each message: if it's a real bond deal post, run SIX checks per RULES_COMPACT.md (headline, body, tranche form, deal flags, priced-deal form, sweep). If tender/LM/non-deal → skip.
 
 **CRITICAL — always fetch the full news record:** `search <term>` returns a summary that does NOT include `tranches[i].figi` or other tranche-level fields. For every real deal, you MUST call `news <cat> <id>` to get the full record before checking tranche form fields. Never mark Clean without having called `news` and explicitly checked `tranches[i].figi` for each tranche.
-3. Post finding via slack_post.py. React on original: clean → `double-tick`, flagged → `exclamation`, skipped → no react.
+3. Post finding via slack_post.py. React on original message with slack_react.py: clean → `double-tick` ONLY, flagged → `exclamation` ONLY, skipped → no react. **NEVER react with `white_check_mark` — that emoji only appears in the post TEXT, it is not a reaction to add.**
 4. Write each result to $STATE_DELTA_FILE as `{ts: {checked_at, verdict}}`. Never touch state.json directly.
 
 Note: a message may already have a mechanical pre-check flag posted in its thread (tagged `· pre-check)` - e.g. a missing FIGI). That's a separate, narrower pass - it does NOT mean this message has already been fully QA'd. Always run your own complete six-check walk regardless, and post your own separate finding as normal (slack_post.py won't block you on the pre-check's post specifically). You don't need to re-flag the exact same mechanically-covered field again if you also happen to notice it - just don't skip checking everything else because a pre-check flag already exists.
