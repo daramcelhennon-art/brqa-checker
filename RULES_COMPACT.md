@@ -175,8 +175,12 @@
 - **`maturityDate` — check BOTH presence AND correctness:** must match the source's stated maturity date for that tranche. A date off by even one day is a defect. Derive from the source maturity (e.g. "due 16 October 2056" → `2056-10-16`).
 - **`couponRate` — check BOTH presence AND correctness:** must match the source's stated coupon % for that tranche. For FRN/floating-rate tranches this field may legitimately be absent; for fixed-rate tranches it must be populated and match the source coupon to two decimal places.
 - `isin`, `figi`, `bloombergCode` — all three MUST be populated AND match the source's value for that exact tranche (ISIN/FIGI/ticker from the term sheet or bbg-lookup message) — null = flag, but so is a populated value that doesn't match the source
-- `tranches[i].figi` null — flag from the deal's first stage (Mandate/IPTs/Guidance, whichever first) onward, every pre-priced stage, not just once priced; stops once `type: PRICED` (priced-deal `figi` rule takes over)
-- `figi` null (priced-deal OR pre-priced `tranches[i].figi`) — ALSO tag `<@U09GENPJNQ5>` (Bloomberg IG Europe) + `<@U09GGGDB286>` (Bloomberg EM) on the flag, not just a plain flag
+- `tranches[i].figi` null — check from the deal's first stage (Mandate/IPTs/Guidance) onward; `pricedDeals[i].figi` null — check at Priced. Missing FIGI is NEVER a reason to mark a deal "flagged" — see FIGI REACTION RULES below.
+- **FIGI REACTION RULES — missing FIGI uses a softer format (does NOT trigger exclamation):**
+  - FIGI missing, no other errors → post `:white_check_mark:` clean message, then append Bloomberg terminal tags + "tranche FIGI not populated" Fix section below the clean line. React `double-tick` + `figi`. Do NOT tag the associate.
+  - FIGI missing + other real errors → normal flagged message (tag associate line 1), append FIGI fix bullet(s) at END of Fix list, add Bloomberg terminal tags on line 2. React `exclamation` + `figi`.
+  - FIGI populated → no figi reaction regardless of other verdict.
+  - Bloomberg terminals to tag when FIGI missing: `<@U09GENPJNQ5>` (Bloomberg - IG Europe) + `<@U09GGGDB286>` (Bloomberg - EM) — always tag both.
 - `cusip` — NOT on priced form; never flag
 - Dual-ISIN: only one stored (usually RegS `XS…`); don't flag other missing
 - Format flags: EXACTLY ONE true of `dealRegsOnly`/`deal144aOnly`/`deal144aRegs`/`secRegistered`/`hg3a2`/`hgSecExempt` — AND it must be the ONE that matches the source's actual stated distribution (e.g. source says "144A/RegS" → `deal144aRegs`; "Reg S only" → `dealRegsOnly`); having exactly one true is not sufficient if it's the WRONG one

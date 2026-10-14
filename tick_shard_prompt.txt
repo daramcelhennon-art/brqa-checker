@@ -15,7 +15,27 @@ Env vars loaded: BR_USERNAME, BR_PASSWORD, SLACK_BOT_TOKEN, SHARD_FILE, STATE_DE
 2. For each message: if it's a real bond deal post, run SIX checks per RULES_COMPACT.md (headline, body, tranche form, deal flags, priced-deal form, sweep). If tender/LM/non-deal → skip.
 
 **CRITICAL — always fetch the full news record:** `search <term>` returns a summary that does NOT include `tranches[i].figi` or other tranche-level fields. For every real deal, you MUST call `news <cat> <id>` to get the full record before checking tranche form fields. Never mark Clean without having called `news` and explicitly checked `tranches[i].figi` for each tranche.
-3. Post finding via slack_post.py. React on original message with slack_react.py: clean → `double-tick` ONLY, flagged → `exclamation` ONLY, skipped → no react. **NEVER react with `white_check_mark` — that emoji only appears in the post TEXT, it is not a reaction to add.**
+3. Post finding via slack_post.py. React on original message with slack_react.py per these rules:
+
+**FIGI handling — softer treatment so FIGI noise doesn't mask real errors:**
+- A missing `tranches[i].figi` (tranche form) or `pricedDeals[i].figi` (priced form) is NEVER treated as a defect that makes a deal "flagged". Always evaluate the rest of the deal on its own merits.
+- **FIGI missing, no other errors** → post a CLEAN message (`:white_check_mark:` header) but append a FIGI section after the clean line; react with `double-tick` AND `figi`; tag the Bloomberg terminal users (NOT the associate):
+  ```
+  :white_check_mark: BR QA — id `<id>` at <stage> — Clean
+  <@U09GENPJNQ5> <@U09GGGDB286>
+  tranche FIGI not populated
+  Fix:
+  • tranches[A].figi — null → populate with Bloomberg FIGI for <Issuer> <CCY> <tenor> notes.
+  _(automated · BR QA Checker)_
+  ```
+- **FIGI missing + other real errors** → post a FLAGGED message as normal (tag associate first line), then append FIGI fix bullet(s) at the END of the Fix list; react with `exclamation` AND `figi`; tag associate on line 1 AND Bloomberg terminals on line 2.
+- **FIGI populated, no errors** → normal clean post, `double-tick` only.
+- **FIGI populated, other errors** → normal flagged post, `exclamation` only.
+
+Bloomberg terminal user IDs to tag when FIGI missing: `<@U09GENPJNQ5>` (Bloomberg - IG Europe) and `<@U09GGGDB286>` (Bloomberg - EM). Always tag both regardless of deal category.
+
+**NEVER react with `white_check_mark` — that emoji only appears in the post TEXT, it is not a reaction to add.**
+For all non-FIGI verdicts: clean → `double-tick` ONLY, flagged → `exclamation` ONLY, skipped → no react.
 4. Write each result to $STATE_DELTA_FILE as `{ts: {checked_at, verdict}}`. Never touch state.json directly.
 
 Note: a message may already have a mechanical pre-check flag posted in its thread (tagged `· pre-check)` - e.g. a missing FIGI). That's a separate, narrower pass - it does NOT mean this message has already been fully QA'd. Always run your own complete six-check walk regardless, and post your own separate finding as normal (slack_post.py won't block you on the pre-check's post specifically). You don't need to re-flag the exact same mechanically-covered field again if you also happen to notice it - just don't skip checking everything else because a pre-check flag already exists.

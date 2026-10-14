@@ -138,18 +138,10 @@ def check_deal(br: BondRadar, cat: str, deal: dict, source_text: str) -> tuple[l
     hg = deal.get("hgDetails") or {}
     em = deal.get("emDetails") or {}
 
-    # 0. Tranche-level FIGI must be populated from the start - any pre-priced
-    # stage (Mandate onward), not just once the tranche is actually priced.
-    # Separate from the figi on the priced-deal record itself (checked below
-    # once pricing happens - they must match per checklist.md). Missing it
-    # blocks Bloomberg's own downstream linking, so tag the Bloomberg feed
-    # accounts directly rather than just flagging it.
-    if stage != "priced":
-        for i, tranche in enumerate(deal.get("tranches") or []):
-            if not tranche.get("figi"):
-                label = f"Tranche {chr(65 + i)}" if len(deal.get("tranches") or []) > 1 else "Tranche"
-                flags.append(f"`tranches[{i}].figi` — null → {label} has no FIGI (required from Mandate onward, not just once priced)")
-                tag_bloomberg = True
+    # 0. FIGI checks are handled entirely by Claude's AI pass (tick_shard_prompt.txt)
+    # with the softer "clean + figi emoji" format. pre_check.py no longer flags FIGI
+    # so that missing-FIGI deals don't get an exclamation reaction that drowns out
+    # real errors.
 
     # 1. highYield requires hyExpectedPageId (pre-priced only)
     if hg.get("highYield") and stage != "priced":
@@ -190,10 +182,10 @@ def check_deal(br: BondRadar, cat: str, deal: dict, source_text: str) -> tuple[l
 
             label = f"pricedDeals[{tranche_idx}]" if len(deal["pricedDeals"]) > 1 else "priced record"
 
-            # 5a. isin / figi / bloombergCode must all be populated.
+            # 5a. isin / bloombergCode must be populated (figi handled by Claude AI pass).
             # Re-fetch once before flagging — priced form may not yet be saved
             # if the associate is still entering codes when the bot runs.
-            missing_fields = [f for f in ("isin", "figi", "bloombergCode") if not pd.get(f)]
+            missing_fields = [f for f in ("isin", "bloombergCode") if not pd.get(f)]
             if missing_fields:
                 try:
                     pd2 = br.get_priced_deal(cat, priced_id)
@@ -202,8 +194,6 @@ def check_deal(br: BondRadar, cat: str, deal: dict, source_text: str) -> tuple[l
                     pass
             for field in missing_fields:
                 flags.append(f"`{label}.{field}` — null → must be populated on priced record")
-                if field == "figi":
-                    tag_bloomberg = True
 
             # 5b. Exactly one format flag true (which ONE is correct is
             # source-dependent - Claude's AI pass checks that; this only
