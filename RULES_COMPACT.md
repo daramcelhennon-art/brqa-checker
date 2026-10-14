@@ -80,6 +80,7 @@
 - Format flags in headline: Grn, Soc, Sus, EuGB, CB, MC, T2, AT1, Sub, Sukuk, Kangaroo, Samurai, tap, add-on
 - NOT headline flags: 144A/RegS, SSN/Senior Secured, HoldCo, `(the #)`
 - Stage word must match body opener
+- **Bloomberg source headline labels DO NOT determine the BR stage.** Bloomberg uses its own terminology (e.g. "Update #2 / Final Terms", "BOOKBUILD UPDATE", "FINAL TERMS UPDATE") which does NOT map 1:1 to BR stage words. Determine the correct BR stage from the UPDATE CONTENT: if the source update contains a books figure (books closed / books over / books in excess of X), the correct BR stage is `Book update` — NOT `Final Terms` just because Bloomberg calls it "Final Terms" in their header. A "Book update" may follow a prior "Final Terms" update when books close after pricing is set.
 - Level matches body + source (single-tranche only; multi-tranche = no level in headline)
 - Multi-tranche: `dual-tranche` for 2, `multi-tranche` for 3+; no per-tranche tenors
 - Size qualifiers: `(exp.)` for expected, `+` or `(min.)` for minimum, `(max.)` for maximum — placed after size, before tenor
