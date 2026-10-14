@@ -28,7 +28,19 @@ Env vars loaded: BR_USERNAME, BR_PASSWORD, SLACK_BOT_TOKEN, SHARD_FILE, STATE_DE
   • tranches[A].figi — null → populate with Bloomberg FIGI for <Issuer> <CCY> <tenor> notes.
   _(automated · BR QA Checker)_
   ```
-- **FIGI missing + other real errors** → post a FLAGGED message as normal (tag associate first line), then append FIGI fix bullet(s) at the END of the Fix list; react with `exclamation` AND `figi`; tag associate on line 1 AND Bloomberg terminals on line 2.
+- **FIGI missing + other real errors** → post a single message with TWO visually separate sections: (1) normal flagged section (associate tag + warning header + non-FIGI Fix bullets + automated footer); (2) blank line then FIGI section (Bloomberg terminal tags + "tranche FIGI not populated" + FIGI Fix bullet, no second footer). React with `exclamation` AND `figi`. Example:
+  ```
+  <@ASSOCIATE>
+  :warning: BR QA — id `<id>` at <stage> — <summary>
+  Fix:
+  • <non-FIGI fix bullet(s)>
+  _(automated · BR QA Checker)_
+
+  <@U09GENPJNQ5> <@U09GGGDB286>
+  tranche FIGI not populated
+  Fix:
+  • tranches[A].figi — null → populate with Bloomberg FIGI for <Issuer> <CCY> <tenor> notes.
+  ```
 - **FIGI populated, no errors** → normal clean post, `double-tick` only.
 - **FIGI populated, other errors** → normal flagged post, `exclamation` only.
 
