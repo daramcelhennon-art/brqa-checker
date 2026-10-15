@@ -112,7 +112,7 @@ def _stage_from_headline(headline: str) -> str | None:
 
 def _has_accents(text: str) -> bool:
     for ch in text:
-        if ord(ch) > 127 and unicodedata.category(ch) not in ("Zs",):
+        if ord(ch) > 127 and unicodedata.category(ch).startswith("L"):
             return True
     return False
 
@@ -156,8 +156,13 @@ def check_deal(br: BondRadar, cat: str, deal: dict, source_text: str) -> tuple[l
 
     # 4. Accentuated chars in body (not at Mandate)
     if stage and stage != "mandate" and _has_accents(body):
-        bad = [ch for ch in body if ord(ch) > 127 and unicodedata.category(ch) not in ("Zs",)]
-        flags.append(f"Body contains accented characters — strip diacritics: {''.join(set(bad))[:30]}")
+        bad_chars = [ch for ch in body if ord(ch) > 127 and unicodedata.category(ch).startswith("L")]
+        # Find first occurrence with surrounding context
+        first_bad = bad_chars[0] if bad_chars else ""
+        idx = body.find(first_bad) if first_bad else -1
+        context = body[max(0, idx - 20):idx + 20].replace("\n", " ").strip() if idx >= 0 else ""
+        unique = "".join(dict.fromkeys(bad_chars))[:10]
+        flags.append(f"Body contains accented characters — strip diacritics: {unique!r} (near: \"{context}\")")
 
     # 5. Priced-form checks (only when stage == priced)
     # Loop EVERY priced record, not just pricedDeals[0] - a multi-tranche
