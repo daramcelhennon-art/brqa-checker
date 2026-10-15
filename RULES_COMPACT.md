@@ -2,6 +2,7 @@
 
 ## NEVER-FLAG LIST
 - Timezone labels (CET/CEST/UKT/BST/EST/EDT/JST/HKT) — never check, never flag in any direction
+- **Times must be 24-hour format** — `11.30` not `11.30am`; `23.30` not `11.30pm`. Flag `am`/`pm` suffixes on any time in the body as wrong.
 - ESG short/long form in headline (Grn↔Green, Soc↔Social, Sus↔Sustainable) — interchangeable
 - `(equiv. MS+X)` / `SOFR equivalent` in body — optional, never flag presence or absence
 - `may follow, subject to market conditions` in mandate body — preferred but NEVER required; NEVER flag its absence
