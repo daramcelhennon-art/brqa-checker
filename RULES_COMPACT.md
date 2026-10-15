@@ -81,6 +81,7 @@
 - NOT headline flags: 144A/RegS, SSN/Senior Secured, HoldCo, `(the #)`
 - Stage word must match body opener
 - **Bloomberg source headline labels DO NOT determine the BR stage.** Bloomberg uses its own terminology (e.g. "Update #2 / Final Terms", "BOOKBUILD UPDATE", "FINAL TERMS UPDATE") which does NOT map 1:1 to BR stage words. Determine the correct BR stage from the UPDATE CONTENT: if the source update contains a books figure (books closed / books over / books in excess of X), the correct BR stage is `Book update` — NOT `Final Terms` just because Bloomberg calls it "Final Terms" in their header. A "Book update" may follow a prior "Final Terms" update when books close after pricing is set.
+- **EXCEPTION — named pricing stages take priority over content-based Book update inference.** When the source explicitly names `FPG` (Final Price Guidance), `Guidance`, `Revised Guidance`, `Spread set`, or `Launched`/`Final Terms` as the stage, that named stage is correct even if the body also contains a books-over figure. A books figure appearing alongside FPG/Guidance is normal (books are often referenced in the same update as guidance). NEVER override a named source stage to `Book update` just because a books figure is present.
 - Level matches body + source (single-tranche only; multi-tranche = no level in headline)
 - Multi-tranche: `dual-tranche` for 2, `multi-tranche` for 3+; no per-tranche tenors
 - Size qualifiers: `(exp.)` for expected, `+` or `(min.)` for minimum, `(max.)` for maximum — placed after size, before tenor
