@@ -143,8 +143,8 @@ def check_deal(br: BondRadar, cat: str, deal: dict, source_text: str) -> tuple[l
     # so that missing-FIGI deals don't get an exclamation reaction that drowns out
     # real errors.
 
-    # 1. highYield requires hyExpectedPageId (pre-priced only)
-    if hg.get("highYield") and stage != "priced":
+    # 1. highYield requires hyExpectedPageId (pre-priced only; skip if stage unknown)
+    if hg.get("highYield") and stage not in (None, "priced"):
         hype = hg.get("hyExpectedPageId")
         if not hype:
             flags.append("`hyExpectedPageId` — null → populate HYRE## (`highYield=true` requires it)")
