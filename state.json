@@ -9780,5 +9780,9 @@
   "1792154092.591859": {
     "checked_at": "2026-10-16T12:36:16Z",
     "verdict": "skipped"
+  },
+  "1792154309.824989": {
+    "checked_at": "2026-10-16T13:41:35Z",
+    "verdict": "clean_figi_missing"
   }
 }
