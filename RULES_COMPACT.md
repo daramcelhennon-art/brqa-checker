@@ -135,7 +135,7 @@
   - Case B (no final book): `… Books last heard over EUR2.5bn.`
 - Timing statements: always end of latest live line, never on own line or attached to carried-forward paragraph
 - Book Update: previous timing removed from standing paragraph AND appended to end of Book update line — e.g. `Book update: Books over GBP1.25bn (Incl. GBP100m JLM). Books open, today's business.` If the book update line has no timing appended, flag it. CBA 14690082 (2026-09-28): timing "Books open, today's business." was dropped entirely instead of being moved.
-- **Book Update body opener — "IPTs remain…" / "Guidance remains…" when spread not yet set.** At Book Update stage, if the deal is still at IPTs or Guidance level (spread has NOT been set), the body opener MUST change from `IPTs are…` / `Guidance is…` to `IPTs remain…` / `Guidance remains…` (or equivalent "remain" phrasing). Flag if the opener still says "IPTs are" or "Guidance is" without "remain" at Book Update stage. This rule does NOT apply once spread is set (Spread set / Launched / Final Terms stages).
+- **Book Update body opener — "IPTs remain…" / "Guidance remains…" only when the stage is UNCHANGED from the prior update.** If the prior update was IPTs and this Book Update keeps IPTs (no level change), opener → `IPTs remain…`. If the prior update was Guidance and this Book Update keeps Guidance, opener → `Guidance remains…`. NEVER use "remains" when the stage itself has changed (e.g. IPTs → Guidance in the same update — that opener stays `Guidance is…` because it's a new stage, not a continuation). This rule does NOT apply once spread is set (Spread set / Launched / Final Terms stages).
 - `Final books over` vs `Final books above` — interchangeable; don't flag either wording
 
 ## TRANCHE FORM RULES
