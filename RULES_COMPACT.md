@@ -177,7 +177,7 @@
 - Moody's stored ALL-CAPS: `BAA3` = `Baa3`; normalise before comparing
 - S&P underscore: `BBB_PLUS` = `BBB+`, `A_MINUS` = `A-`
 - Cross-over: ANY IG rating → treat as IG
-- **`settlementDate` — check BOTH presence AND correctness:** must match the source's stated settlement date for that tranche exactly. A wrong settlement date (e.g. T+5 stored when source says T+6) is a defect even if non-null. Format is ISO date (YYYY-MM-DD).
+- **`settlementDate` — NOT a priced-deal form field; NEVER flag it as missing or wrong on the priced record.** Settlement date lives in the body (pricing message), not the priced form. 14721332 (2026-10-22).
 - **`maturityDate` — check BOTH presence AND correctness:** must match the source's stated maturity date for that tranche. A date off by even one day is a defect. Derive from the source maturity (e.g. "due 16 October 2056" → `2056-10-16`).
 - **`couponRate` — check BOTH presence AND correctness:** must match the source's stated coupon % for that tranche. For FRN/floating-rate tranches this field may legitimately be absent; for fixed-rate tranches it must be populated and match the source coupon to two decimal places.
 - `isin`, `figi`, `bloombergCode` — all three MUST be populated AND match the source's value for that exact tranche (ISIN/FIGI/ticker from the term sheet or bbg-lookup message) — null = flag, but so is a populated value that doesn't match the source
