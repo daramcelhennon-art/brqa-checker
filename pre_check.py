@@ -143,6 +143,10 @@ def check_deal(br: BondRadar, cat: str, deal: dict, source_text: str) -> tuple[l
     # so that missing-FIGI deals don't get an exclamation reaction that drowns out
     # real errors.
 
+    # 0a. Headline must start with ** on EVERY update, no exceptions.
+    if headline and not headline.startswith("**"):
+        flags.append('`headline` — missing `**` prefix — every BR update must start with `**`')
+
     # 1. highYield requires hyExpectedPageId (pre-priced only; skip if stage unknown)
     if hg.get("highYield") and stage not in (None, "priced"):
         hype = hg.get("hyExpectedPageId")
