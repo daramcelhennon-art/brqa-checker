@@ -10252,5 +10252,9 @@
   "1793104851.659059": {
     "checked_at": "2026-10-27T12:46:51.257791Z",
     "verdict": "clean_figi"
+  },
+  "1793105227.814089": {
+    "checked_at": "2026-10-27T12:52:07Z",
+    "verdict": "clean_figi_missing"
   }
 }
