@@ -117,8 +117,10 @@
 - `area` is redundant after a range — `8.75/9.25%` and `MS+130/135bp` already imply area; flag body opener `X/Y% area` → `X/Y%` (same rule as priceEvolution field where `a` suffix is never added to ranges)
 - Per-tranche fields that differ go per-tranche, not in Common Terms
 - CHF/SARON body/headline: `SARON MS+X` (with MS); bare `SARON+X` is a defect
-- Mandate body Mode A: source gave prose paragraph → quote verbatim in `"..."`
-- Mandate body Mode B: source gave term-sheet bullets → paraphrase into `<Issuer> is planning a …`
+- **Mandate body mode is determined by SOURCE FORMAT — mismatching mode is a defect:**
+  - **Mode A — direct mandate (prose source)**: source is a formal prose announcement (sentences like "has mandated X, Y, Z to organize…", "is expected to follow, subject to market conditions"); typically arrives with a €€€/★★★/$$$ header from the bank itself. → BR body must quote the mandate text **verbatim** in `"…"`. Using `<Issuer> is planning…` (Mode B) when source is prose is WRONG — flag it.
+  - **Mode B — Bloomberg/term-sheet source**: source is Bloomberg terminal format ("NEW DEAL: Issuer $Bmark…" with `•` bullet lines) or an IB-chat term-sheet with tabular/bullet fields. → BR body uses `<Issuer> is planning a …` paraphrase. Using verbatim quotes (Mode A) when source is Bloomberg bullets is WRONG — flag it.
+  - **Key distinguishing signals**: Bloomberg source always starts "NEW DEAL:" / "PRICED:" / "GUIDANCE:" etc. and has `•` bullet lines. A direct mandate has prose paragraphs and often a formal "has mandated … to organize/arrange" sentence. When in doubt: prose paragraphs = Mode A; bullets = Mode B.
 - **Roadshow Update / Timing Update body format** — two parts: (1) update content as a **prose paragraph** (source bullets joined with `. `, no bullet formatting); (2) `Original mandate is as follows:` on a new line; (3) the full original mandate body in quotes below. Flag if: bullets not joined to prose, `Original mandate is as follows:` line missing, or original mandate body absent.
 - Both modes require: mandate verb + banks + role, ratings (both issuer + expected issue when different), UOP, logistics coordinator, rep/contact name (e.g. `Max Querling (Head of Financial Planning & Analysis)`) — flag if missing
 - €€€/★★★ header line in mandate body — optional; NEVER flag its absence or corruption; body may start directly with issuer name/description
