@@ -9860,5 +9860,9 @@
   "1793624307.244009": {
     "checked_at": "2026-11-02T13:01:14Z",
     "verdict": "clean_figi_missing"
+  },
+  "1793624807.023789": {
+    "checked_at": "2026-11-02T13:12:00Z",
+    "verdict": "clean_figi"
   }
 }
