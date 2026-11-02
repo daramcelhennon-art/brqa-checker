@@ -9961,5 +9961,9 @@
     "checked_at": "2026-11-02T00:00:00Z",
     "verdict": "skipped",
     "note": "Content anomaly, not auto-posted: message header matches BR deal 14740007 (Alphabet Inc EUR6bn multi-tranche, Allocations) but the body lists German sovereign bond instruments (BKO 2028 / OBL 2030 / DBR 2032-2044) with DE000BU.../XS... ISINs, percent-of-par prices, and maturity dates that bear no relation to Alphabet's 7-tranche corporate structure (due 2028-2045 off a 5 Nov 2026 settle, MS+/E+ spreads). search for BKO/Bundesrepublik returns no matching BR deal at all. This looks like corrupted/mismatched or injected source content rather than a genuine update for this deal, so no six-check QA walk or Slack post was performed against it; flagged to operator instead of fabricating a fix from the mismatched data."
+  },
+  "1793637118.731499": {
+    "checked_at": "2026-11-02T00:00:00Z",
+    "verdict": "skipped"
   }
 }
