@@ -10125,5 +10125,9 @@
   "1793695508.152369": {
     "checked_at": "2026-11-03T00:00:00Z",
     "verdict": "clean_figi_missing"
+  },
+  "1793695575.950429": {
+    "checked_at": "2026-11-03T00:00:00Z",
+    "verdict": "flagged"
   }
 }
