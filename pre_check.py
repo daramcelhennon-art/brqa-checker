@@ -147,6 +147,24 @@ def check_deal(br: BondRadar, cat: str, deal: dict, source_text: str) -> tuple[l
     if headline and not headline.startswith("**"):
         flags.append('`headline` — missing `**` prefix — every BR update must start with `**`')
 
+    # 0b. At Final Terms / Launched stage, every tranche timing must be "launched".
+    # This runs even when pre_check fires first (Claude's AI pass is skipped in that path),
+    # so a wrong timing alongside a headline flag would otherwise be silently missed.
+    if stage in ("final_terms", "launched"):
+        try:
+            full = br.get_news(cat, deal_id)
+            tranches = full.get("tranches") or []
+            for i, tranche in enumerate(tranches):
+                t = (tranche.get("timing") or "").strip().lower()
+                if t and t not in ("launched", "dropped"):
+                    label = f"tranches[{i}]" if len(tranches) > 1 else "tranche"
+                    flags.append(
+                        f"`{label}.timing` — `{tranche['timing']}` → `launched` "
+                        f"(deal is at {stage.replace('_', ' ')} stage; must be `launched` once size and spread are set)"
+                    )
+        except Exception as e:
+            print(f"  timing check failed for {deal_id}: {e}", file=sys.stderr)
+
     # 1. highYield requires hyExpectedPageId (pre-priced only; skip if stage unknown)
     if hg.get("highYield") and stage not in (None, "priced"):
         hype = hg.get("hyExpectedPageId")
