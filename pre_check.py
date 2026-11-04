@@ -305,6 +305,20 @@ def process_message(br: BondRadar, msg: dict, delta_path: str) -> str:
         # Take everything before the first " – " or ":"
         m = re.split(r"\s[–—-]\s|:", clean, maxsplit=1)
         candidate = m[0].strip()
+        # Skip term-sheet field labels (single-word labels before a colon that are
+        # NOT company names, e.g. "Timing:", "Issuer:", "Format:", "Ratings:").
+        # These appear at the start of tabular term-sheet messages and would cause
+        # find_by_issuer to match completely wrong deals. Mapfre false-positive 2026-11-04.
+        _FIELD_LABELS = {
+            "timing", "issuer", "instrument", "format", "ratings", "rating",
+            "status", "currency", "tenor", "size", "maturity", "pricing",
+            "settlement", "listing", "coupon", "ranking", "collateral",
+            "structure", "denomination", "bookrunners", "bookrunner",
+            "managers", "manager", "guarantor", "lei", "proceeds", "use",
+            "type", "governing", "joint", "isin", "cusip", "figi",
+        }
+        if candidate.lower() in _FIELD_LABELS:
+            continue
         if len(candidate) > 4:
             issuer = candidate
             break
