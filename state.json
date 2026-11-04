@@ -9824,5 +9824,9 @@
   "1793823422.838739": {
     "checked_at": "2026-11-04T00:00:00Z",
     "verdict": "flagged"
+  },
+  "1793823216.455949": {
+    "checked_at": "2026-11-04T20:29:58Z",
+    "verdict": "clean_figi_missing_already_posted"
   }
 }
