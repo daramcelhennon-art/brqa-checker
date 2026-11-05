@@ -339,6 +339,14 @@ def process_message(br: BondRadar, msg: dict, delta_path: str) -> str:
         # Take everything before the first " – " or ":"
         m = re.split(r"\s[–—-]\s|:", clean, maxsplit=1)
         candidate = m[0].strip()
+        # Strip deal metadata that follows the issuer name in Bloomberg headers:
+        # e.g. "MANDATE: AUCKLAND COUNCIL EUR500M WNG 6YR GREEN SENIOR SECURED BOND"
+        # → after stage strip: "AUCKLAND COUNCIL EUR500M WNG ..." → trim at currency+size.
+        # This prevents the size/structure tokens from polluting the issuer match.
+        candidate = re.split(
+            r"\s+(?:EUR|USD|GBP|CHF|JPY|AUD|CAD|SGD|HKD|NOK|SEK|NZD|CNH|CNY)\d",
+            candidate, maxsplit=1, flags=re.IGNORECASE
+        )[0].strip()
         # Skip term-sheet field labels (single-word labels before a colon that are
         # NOT company names, e.g. "Timing:", "Issuer:", "Format:", "Ratings:").
         # These appear at the start of tabular term-sheet messages and would cause
