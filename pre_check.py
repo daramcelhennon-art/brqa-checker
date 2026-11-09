@@ -242,33 +242,24 @@ def check_deal(br: BondRadar, cat: str, deal: dict, source_text: str) -> tuple[l
                         )
 
             # 5e. finalBooks null check at Priced stage.
-            # Rules: when body has "Final books over X" (Case A with JLM) → finalBooks must be populated.
-            # When body has NO book line at all (Case A, no JLM figure declared) → finalBooks field
-            # is the ONLY place the books figure lives, so it must be populated.
-            # When body has "Books last heard over X" (Case B) → finalBooks must be null.
-            # We only check the first priced record for this (single-tranche logic; multi-tranche
-            # deals may legitimately share one finalBooks value).
+            # Only two mechanical cases we can verify without deal history:
+            #   Case A-JLM: body has "Final books over X" → finalBooks must be populated.
+            #   Case B: body has "Books last heard over X" → finalBooks must be null.
+            # We do NOT flag when body has no book line — if books were never mentioned
+            # in any prior update, finalBooks null is perfectly correct. The AI pass
+            # handles the history-aware check (did a prior update mention books?).
             if tranche_idx == 0:
                 has_final_books_body = bool(re.search(r"[Ff]inal books", body))
                 has_last_heard_body = bool(re.search(r"[Bb]ooks last heard", body))
-                has_any_book_line = has_final_books_body or has_last_heard_body
                 final_books_val = pd.get("finalBooks")
 
-                # Case A with JLM: body has "Final books over X" → finalBooks must be populated
+                # Case A-JLM: body says "Final books over X" → finalBooks must be populated
                 if has_final_books_body and final_books_val is None:
                     flags.append(
                         "`priced record.finalBooks` — null, but body says 'Final books over X'; "
                         "populate `finalBooks` with the books figure in millions of tranche currency"
                     )
-                # Case A no JLM: body has NO book line → finalBooks must be populated
-                elif not has_any_book_line and final_books_val is None:
-                    flags.append(
-                        "`priced record.finalBooks` — null and body has no book line; "
-                        "if source provided a final books figure, populate `finalBooks` (millions of tranche ccy) "
-                        "— if source only had a mid-book figure, body should say 'Books last heard over X' "
-                        "and `additionalInfo` should mirror it"
-                    )
-                # Case B: body has "Books last heard" → finalBooks must be null
+                # Case B: body says "Books last heard" → finalBooks must be null
                 elif has_last_heard_body and final_books_val is not None:
                     flags.append(
                         f"`priced record.finalBooks` — {final_books_val} but body says 'Books last heard' (Case B); "
