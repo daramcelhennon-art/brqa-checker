@@ -241,13 +241,13 @@ def check_deal(br: BondRadar, cat: str, deal: dict, source_text: str) -> tuple[l
                             f"`{label}.statsCategories` {cat_type} sums to {total:.1f} — must be 100.0"
                         )
 
-            # 5e. finalBooks null check at Priced stage.
-            # Only two mechanical cases we can verify without deal history:
-            #   Case A-JLM: body has "Final books over X" → finalBooks must be populated.
-            #   Case B: body has "Books last heard over X" → finalBooks must be null.
-            # We do NOT flag when body has no book line — if books were never mentioned
-            # in any prior update, finalBooks null is perfectly correct. The AI pass
-            # handles the history-aware check (did a prior update mention books?).
+            # 5e. Book-line carry-forward check at Priced stage.
+            # Three cases:
+            #   Case A-JLM: body says "Final books over X" → finalBooks must be populated.
+            #   Case B: body says "Books last heard over X" → finalBooks must be null.
+            #   No body book line: check dealHistory — if any prior update mentioned a books
+            #   figure it must be carried forward to the Priced body. If no prior update ever
+            #   had a books figure, finalBooks null is fine.
             if tranche_idx == 0:
                 has_final_books_body = bool(re.search(r"[Ff]inal books", body))
                 has_last_heard_body = bool(re.search(r"[Bb]ooks last heard", body))
@@ -265,6 +265,34 @@ def check_deal(br: BondRadar, cat: str, deal: dict, source_text: str) -> tuple[l
                         f"`priced record.finalBooks` — {final_books_val} but body says 'Books last heard' (Case B); "
                         "set `finalBooks` to null for Case B deals"
                     )
+                # No book line in body — check deal history for a prior books figure
+                elif not has_final_books_body and not has_last_heard_body:
+                    try:
+                        full_news = br.get_news(cat, deal_id)
+                        history = full_news.get("dealHistory") or []
+                        prior_book_re = re.compile(
+                            r"(?:[Ff]inal\s+books|[Bb]ooks\s+last\s+heard)\s+over\s+\S+",
+                            re.IGNORECASE,
+                        )
+                        prior_match = None
+                        # Scan most-recent history entries first
+                        for entry in reversed(history):
+                            msg = entry.get("message") or ""
+                            m = prior_book_re.search(msg)
+                            if m:
+                                prior_match = m.group(0)
+                                break
+                        if prior_match:
+                            flags.append(
+                                f"`priced body` — book line missing; prior update had '{prior_match}'. "
+                                "Carry forward to end of closing paragraph "
+                                "('Final books over X' or 'Books last heard over X'). "
+                                "Also populate `finalBooks` (millions of tranche ccy) if final books, "
+                                "or add to `additionalInfo` and leave `finalBooks` null if books last heard."
+                            )
+                        # else: no prior books figure — finalBooks null is correct
+                    except Exception as e:
+                        print(f"  deal history book check failed for {deal_id}: {e}", file=sys.stderr)
 
             # 5d. fpr vs the body's own stated "Reoffer X" for this tranche,
             # by position - a deterministic safety net independent of the AI
