@@ -265,32 +265,65 @@ def check_deal(br: BondRadar, cat: str, deal: dict, source_text: str) -> tuple[l
                         f"`priced record.finalBooks` — {final_books_val} but body says 'Books last heard' (Case B); "
                         "set `finalBooks` to null for Case B deals"
                     )
-                # No book line in body — check deal history for a prior books figure
+                # No book line in body — check deal history for a prior books figure.
+                # Three sub-cases based on what the prior update said:
+                #   (i)  "Final books over X" WITH JLM → body must carry it forward
+                #   (ii) "Final books over X" WITHOUT JLM → NO body line; finalBooks form must be populated
+                #   (iii) "Books last heard over X" → body must carry it forward + additionalInfo
                 elif not has_final_books_body and not has_last_heard_body:
                     try:
                         full_news = br.get_news(cat, deal_id)
                         history = full_news.get("dealHistory") or []
-                        prior_book_re = re.compile(
-                            r"(?:[Ff]inal\s+books|[Bb]ooks\s+last\s+heard)\s+over\s+\S+",
-                            re.IGNORECASE,
+                        prior_final_re = re.compile(
+                            r"[Ff]inal\s+books\s+(?:over|above)\s+\S+", re.IGNORECASE
                         )
+                        prior_last_re = re.compile(
+                            r"[Bb]ooks\s+last\s+heard\s+over\s+\S+", re.IGNORECASE
+                        )
+                        jlm_re = re.compile(r"\(incl\.?\s+\w*\s*JLM", re.IGNORECASE)
+
                         prior_match = None
-                        # Scan most-recent history entries first
+                        prior_match_type = None  # 'final' or 'last_heard'
+                        prior_has_jlm = False
+
                         for entry in reversed(history):
                             msg = entry.get("message") or ""
-                            m = prior_book_re.search(msg)
-                            if m:
-                                prior_match = m.group(0)
+                            mf = prior_final_re.search(msg)
+                            if mf:
+                                prior_match = mf.group(0)
+                                prior_match_type = "final"
+                                prior_has_jlm = bool(jlm_re.search(msg[mf.start():mf.start() + 120]))
                                 break
-                        if prior_match:
+                            ml = prior_last_re.search(msg)
+                            if ml:
+                                prior_match = ml.group(0)
+                                prior_match_type = "last_heard"
+                                break
+
+                        if prior_match_type == "final" and prior_has_jlm:
+                            # Case A with JLM: body must carry line forward
+                            flags.append(
+                                f"`priced body` — book line missing; prior update had '{prior_match}' (with JLM). "
+                                "Carry 'Final books over X (incl. JLM)' to end of closing paragraph "
+                                "and populate `finalBooks` with the figure in millions of tranche currency."
+                            )
+                        elif prior_match_type == "final" and not prior_has_jlm:
+                            # Case A without JLM: NO body line; finalBooks form is the only place
+                            if final_books_val is None:
+                                flags.append(
+                                    f"`finalBooks` — null; prior update had '{prior_match}' (no JLM — "
+                                    "does NOT go in body, form only). "
+                                    "Populate `finalBooks` with the figure in millions of tranche currency."
+                                )
+                            # else: finalBooks populated, body correctly silent — all good
+                        elif prior_match_type == "last_heard":
+                            # Case B: body must carry "Books last heard over X" forward
                             flags.append(
                                 f"`priced body` — book line missing; prior update had '{prior_match}'. "
-                                "Carry forward to end of closing paragraph "
-                                "('Final books over X' or 'Books last heard over X'). "
-                                "Also populate `finalBooks` (millions of tranche ccy) if final books, "
-                                "or add to `additionalInfo` and leave `finalBooks` null if books last heard."
+                                "Append 'Books last heard over X' to end of closing paragraph "
+                                "and mirror in `additionalInfo`. Leave `finalBooks` null."
                             )
-                        # else: no prior books figure — finalBooks null is correct
+                        # else: no prior books figure — no flag
                     except Exception as e:
                         print(f"  deal history book check failed for {deal_id}: {e}", file=sys.stderr)
 
