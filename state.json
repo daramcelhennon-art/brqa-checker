@@ -9784,5 +9784,9 @@
   "1794330820.201009": {
     "checked_at": "2026-11-10T17:15:09Z",
     "verdict": "flagged"
+  },
+  "1794331495.345569": {
+    "checked_at": "2026-11-10T17:32:14Z",
+    "verdict": "clean_figi_missing"
   }
 }
