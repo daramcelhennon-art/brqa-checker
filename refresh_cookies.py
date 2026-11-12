@@ -27,6 +27,15 @@ ENV_FILE = Path.home() / ".bondradar-env"
 
 ADMIN_URL = "https://www.bondradar.com/admin/"
 
+# Cloudflare Access service-token headers — required since 2026-11-11 when
+# CF Access SSO was placed in front of bondradar.com/admin. Without these,
+# the browser hits the Cloudflare email-code challenge instead of the BR
+# login page. Set CF_ACCESS_CLIENT_ID and CF_ACCESS_CLIENT_SECRET as GitHub
+# Secrets (and locally in ~/.bondradar-env). The BR team creates the service
+# token in Cloudflare Zero Trust → Access → Service Auth → Service Tokens.
+CF_CLIENT_ID_ENV = "CF_ACCESS_CLIENT_ID"
+CF_CLIENT_SECRET_ENV = "CF_ACCESS_CLIENT_SECRET"
+
 
 def load_env_file(path: Path) -> None:
     if not path.exists():
@@ -79,8 +88,21 @@ def main() -> int:
         except Exception:
             browser = p.chromium.launch(headless=True)
         context = browser.new_context(
-            http_credentials={"username": nginx_user, "password": nginx_pass}
+            http_credentials={"username": nginx_user, "password": nginx_pass},
         )
+        # Inject the CF_Authorization cookie before navigating so Cloudflare Access
+        # lets the browser through to the Bond Radar login page.
+        cf_auth = os.environ.get("CF_AUTHORIZATION", "")
+        if cf_auth:
+            context.add_cookies([{
+                "name": "CF_Authorization",
+                "value": cf_auth,
+                "domain": "www.bondradar.com",
+                "path": "/",
+                "httpOnly": True,
+                "secure": True,
+                "sameSite": "None",
+            }])
         page = context.new_page()
         page.goto(ADMIN_URL, wait_until="networkidle", timeout=30_000)
 

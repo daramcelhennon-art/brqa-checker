@@ -52,11 +52,16 @@ class BondRadar:
         basic = base64.b64encode(
             f"{self._basic['user']}:{self._basic['pass']}".encode()
         ).decode()
+        # Cloudflare Access cookie — required since 2026-11-11.
+        # Every request to bondradar.com/admin now goes through CF Access SSO.
+        # Prepend CF_Authorization to the cookie header so CF lets the request through.
+        cf_auth = os.environ.get("CF_AUTHORIZATION", "")
+        full_cookie = f"CF_Authorization={cf_auth}; {cookie_header}" if cf_auth else cookie_header
         self._headers = {
             "Accept": "application/json",
             "Content-Type": "application/json",
             "Referer": "https://www.bondradar.com/admin/",
-            "Cookie": cookie_header,
+            "Cookie": full_cookie,
             "Authorization": f"Basic {basic}",
             # Cloudflare in front of bondradar.com blocks the default Python UA.
             "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "

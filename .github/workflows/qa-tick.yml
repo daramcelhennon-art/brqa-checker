@@ -71,6 +71,7 @@ jobs:
           BR_PASSWORD: ${{ secrets.BR_PASSWORD }}
           BR_NGINX_USER: ${{ secrets.BR_NGINX_USER }}
           BR_NGINX_PASS: ${{ secrets.BR_NGINX_PASS }}
+          CF_AUTHORIZATION: ${{ secrets.CF_AUTHORIZATION }}
         run: |
           # Refresh if no cookies file OR cookies older than 6 hours.
           # BR JSESSIONID is session-scoped; better to over-refresh than serve a 401 mid-tick.
@@ -103,6 +104,7 @@ jobs:
           SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
           BR_USERNAME: ${{ secrets.BR_USERNAME }}
           BR_PASSWORD: ${{ secrets.BR_PASSWORD }}
+          CF_AUTHORIZATION: ${{ secrets.CF_AUTHORIZATION }}
         run: |
           echo "=== tick $(date -u +%Y-%m-%dT%H:%M:%SZ) ===" | tee -a logs/tick.log
 
