@@ -10004,5 +10004,9 @@
   "1794815112.754849": {
     "checked_at": "2026-11-16T07:57:40.840797Z",
     "verdict": "clean_figi"
+  },
+  "1794815717.678889": {
+    "checked_at": "2026-11-16T00:00:00Z",
+    "verdict": "clean_figi_missing"
   }
 }
