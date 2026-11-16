@@ -388,8 +388,9 @@ def process_message(br: BondRadar, msg: dict, delta_path: str) -> str:
         clean = _STAGE_PREFIX_RE.sub("", clean)
         if not clean:
             continue
-        # Take everything before the first " – " or ":"
-        m = re.split(r"\s[–—-]\s|:", clean, maxsplit=1)
+        # Take everything before the first " – ", ":", or " | "
+        # (investor-call messages use "Issuer Name | Fixed Income Investor Calls" format)
+        m = re.split(r"\s[–—-]\s|\s*\|\s*|:", clean, maxsplit=1)
         candidate = m[0].strip()
         # Strip deal metadata that follows the issuer name in Bloomberg headers:
         # e.g. "MANDATE: AUCKLAND COUNCIL EUR500M WNG 6YR GREEN SENIOR SECURED BOND"
