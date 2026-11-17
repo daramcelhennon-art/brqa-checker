@@ -229,6 +229,15 @@ def check_deal(br: BondRadar, cat: str, deal: dict, source_text: str) -> tuple[l
             elif len(true_flags) > 1:
                 flags.append(f"`{label}` Format flags — multiple set ({true_flags}); exactly one must be true")
 
+            # 5b-ii. seniorPreferred / seniorNonPreferred are mutually exclusive.
+            sp  = pd.get("seniorPreferred")
+            snp = pd.get("seniorNonPreferred")
+            if sp and snp:
+                flags.append(
+                    f"`{label}` — `seniorPreferred` and `seniorNonPreferred` are both true; "
+                    "they are mutually exclusive — only one can apply"
+                )
+
             # 5c. statsCategories each sum to 100.0 (±0.15)
             cats_data = pd.get("statsCategories") or []
             if cats_data:
