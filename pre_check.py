@@ -144,7 +144,10 @@ def check_deal(br: BondRadar, cat: str, deal: dict, source_text: str) -> tuple[l
     # real errors.
 
     # 0a. Headline must start with ** on EVERY update, no exceptions.
-    if headline and not headline.startswith("**"):
+    # Check source_text (the actual Slack message), NOT deal.get("headline") —
+    # the BR API stores the headline without the ** prefix; the ** comes from Slack.
+    _first_slack_line = source_text.splitlines()[0].strip() if source_text else ""
+    if _first_slack_line and not _first_slack_line.startswith("**"):
         flags.append('`headline` — missing `**` prefix — every BR update must start with `**`')
 
     # 0b. At Final Terms / Launched stage, every tranche timing must be "launched".
