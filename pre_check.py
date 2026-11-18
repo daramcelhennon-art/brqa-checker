@@ -441,6 +441,44 @@ def process_message(br: BondRadar, msg: dict, delta_path: str) -> str:
     stage = _stage_from_headline(headline) or "unknown"
     print(f"  {ts}: matched deal {deal_id} ({headline[:60]}) stage={stage}")
 
+    # ── 2b. Currency cross-check — guard against wrong-deal match ─────────
+    # Same issuer can have multiple deals in different currencies (e.g. USD + CNH).
+    # Extract the first currency code from the Slack headline and from the matched
+    # BR deal's own headline; flag if they differ.
+    _CCY_CODES = r'(EUR|USD|GBP|CHF|JPY|AUD|CAD|SGD|HKD|NOK|SEK|NZD|CNH|CNY)'
+    _ccy_re = re.compile(_CCY_CODES, re.IGNORECASE)
+    slack_first_line = text.splitlines()[0] if text else ""
+    slack_ccy_m = _ccy_re.search(slack_first_line)
+    deal_ccy_m  = _ccy_re.search(headline)
+    if slack_ccy_m and deal_ccy_m:
+        slack_ccy = slack_ccy_m.group(1).upper()
+        deal_ccy  = deal_ccy_m.group(1).upper()
+        if slack_ccy != deal_ccy:
+            # Post this critical flag and still defer to Claude so the full AI
+            # walk also runs — there may be a correct entry that Claude can find.
+            mention = ""
+            reactor_id = None
+            for r in (msg.get("reactions") or []):
+                if r.get("name") == "white_check_mark" and r.get("users"):
+                    reactor_id = r["users"][0]
+                    break
+            if reactor_id:
+                mention = f"<@{reactor_id}>\n"
+            post_text = (
+                f"{mention}:warning: BR QA — id `{deal_id}` at {stage.replace('_',' ').title()} "
+                f"— currency mismatch\n"
+                f"Fix:\n"
+                f"• `deal` — Slack message is a **{slack_ccy}** deal but matched BR deal "
+                f"{deal_id} is **{deal_ccy}**; likely wrong deal matched — check that the "
+                f"{slack_ccy} deal has its own BR entry and was updated separately\n"
+                f"_(automated · BR QA Checker · pre-check)_"
+            )
+            _post(CHANNEL, ts, post_text)
+            _react(CHANNEL, ts, "exclamation")
+            _write_delta(delta_path, ts, "flagged")
+            print(f"  {ts}: currency mismatch {slack_ccy} vs deal {deal_ccy} — flagged")
+            return "flagged"
+
     # ── 3. Mechanical checks ───────────────────────────────────────────────
     flags, tag_bloomberg = check_deal(br, cat, deal, text)
 
