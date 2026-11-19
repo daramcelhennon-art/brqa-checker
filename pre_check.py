@@ -377,7 +377,7 @@ def process_message(br: BondRadar, msg: dict, delta_path: str) -> str:
     _STAGE_PREFIX_RE = re.compile(
         r"^(PRICED|ICED|LAUNCH(?:ED)?|NEW\s+DEAL|FINAL\s+SPREAD|MANDATE"
         r"|GUIDANCE|FINAL\s+TERMS|ALLOCAT(?:ED|IONS?)|BOOK\s+UPDATE"
-        r"|REVISED\s+GUIDANCE|UPDATE\s+\#?\d*|IPT[S]?)\s*[:\-]\s*",
+        r"|REVISED\s+GUIDANCE|UPDATE\s+\#?\d*|IPT[S]?|TALKS?)\s*[:\-]\s*",
         re.IGNORECASE,
     )
     issuer = None
@@ -404,7 +404,8 @@ def process_message(br: BondRadar, msg: dict, delta_path: str) -> str:
         # → after stage strip: "AUCKLAND COUNCIL EUR500M WNG ..." → trim at currency+size.
         # This prevents the size/structure tokens from polluting the issuer match.
         candidate = re.split(
-            r"\s+(?:EUR|USD|GBP|CHF|JPY|AUD|CAD|SGD|HKD|NOK|SEK|NZD|CNH|CNY)\d",
+            r"\s+(?:EUR|USD|GBP|CHF|JPY|AUD|CAD|SGD|HKD|NOK|SEK|NZD|CNH|CNY)\d"
+            r"|\s+\$\d",  # Bloomberg uses $500m not USD500m
             candidate, maxsplit=1, flags=re.IGNORECASE
         )[0].strip()
         # Skip term-sheet field labels (single-word labels before a colon that are
