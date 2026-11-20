@@ -220,7 +220,7 @@
 | CHF | `SARON+` | — |
 | JPY | `TMS+` | — |
 | EUR | `MS+`/`B+`/`OAT+` | `E+` |
-| CAD | `CMS+` | — |
+| CAD | `CGB+` | — |
 | SGD | `SORA+` | — |
 | SEK | `MS+` | `S+` |
 
