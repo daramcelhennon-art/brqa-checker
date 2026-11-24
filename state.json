@@ -11476,5 +11476,9 @@
   "1795507743.397119": {
     "checked_at": "2026-11-24T08:17:17.566495Z",
     "verdict": "clean_figi_missing"
+  },
+  "1795509029.037859": {
+    "checked_at": "2026-11-24T00:00:00Z",
+    "verdict": "clean_figi_missing"
   }
 }
